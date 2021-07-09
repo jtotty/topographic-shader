@@ -1,4 +1,4 @@
-# Three.js Journey - Fantasy Portal
+# Topgraphy using Shaders and Three.js
 
 ## Setup
 
