@@ -34,7 +34,7 @@ export default class Camera {
     this.container.add(this.instance);
 
     this.sizes.on('resize', () => {
-      this.instance.aspect = width / height;
+      this.instance.aspect = this.sizes.viewport.width / this.sizes.viewport.height;
       this.instance.updateProjectionMatrix();
     });
   }

@@ -1,52 +1,55 @@
+/* eslint-disable no-console */
 export default class EventEmitter {
+  /**
+   * Constructor
+   */
   constructor() {
-    this.callbacks = { base: {} };
+    this.callbacks = {};
+    this.callbacks.base = {};
   }
 
   /**
-   * input : this.on('xx/yy/zz.alpha', callback)
-   * result: this.callbacks['base'] = {'xx':[..., callback], 'yy':[..., callback]}
-   *         this.callbacks['alpha'] = {'zz':[..., callback]}
-   * @param {string} _names
-   * @callback       _callback
+   * On
    */
-  on(_names, _callback) {
+  on(_names, callback) {
+    // Errors
     if (typeof _names === 'undefined' || _names === '') {
       console.warn('Invalid names');
       return false;
     }
 
-    if (typeof _callback === 'undefined') {
+    if (typeof callback === 'undefined') {
       console.warn('Invalid callback');
       return false;
     }
 
-    // Resolve names and loop
-    EventEmitter.resolveAllNames(_names).forEach((_name) => {
-      // Resolve the name
-      const { namespace, value } = EventEmitter.resolveSingleName(_name);
+    // Resolve names
+    const names = EventEmitter.resolveNames(_names);
 
-      // Namespace does not exist -> set empty object
-      if (!(this.callbacks[namespace] instanceof Object)) {
-        this.callbacks[namespace] = {};
+    // Each name
+    names.forEach((_name) => {
+      // Resolve name
+      const name = EventEmitter.resolveName(_name);
+
+      // Create namespace if not exist
+      if (!(this.callbacks[name.namespace] instanceof Object)) {
+        this.callbacks[name.namespace] = {};
       }
 
-      // Callbacks do not exist -> set empty array
-      if (!(this.callbacks[namespace][value] instanceof Array)) {
-        this.callbacks[namespace][value] = [];
+      // Create callback if not exist
+      if (!(this.callbacks[name.namespace][name.value] instanceof Array)) {
+        this.callbacks[name.namespace][name.value] = [];
       }
 
       // Add callback
-      this.callbacks[namespace][value].push(_callback);
+      this.callbacks[name.namespace][name.value].push(callback);
     });
 
     return this;
   }
 
   /**
-   * ex: this.remove({_names: 'xx', _callback: ...})
-   * ex: this.remove({_names: 'xx/yy/zz.alpha', _callback: ...})
-   * @param {string} names
+   * Off
    */
   off(_names) {
     // Errors
@@ -56,33 +59,36 @@ export default class EventEmitter {
     }
 
     // Resolve names
-    EventEmitter.resolveAllNames(_names).forEach((_name) => {
-      // Resolve name
-      const { namespace, value } = EventEmitter.resolveSingleName(_name);
+    const names = EventEmitter.resolveNames(_names);
 
-      // Remove namepsace
-      if (namespace !== 'base' && value === '') {
-        delete this.callbacks[namespace];
-      } else if (namespace === 'base') {
-        Object.values(this.callbacks).forEach((_namespace) => {
-          if (_namespace instanceof Object && _namespace[value] instanceof Array) {
-            delete this.callbacks[namespace][value];
+    // Each name
+    names.forEach((_name) => {
+      // Resolve name
+      const name = EventEmitter.resolveName(_name);
+
+      // Remove namespace
+      if (name.namespace !== 'base' && name.value === '') {
+        delete this.callbacks[name.namespace];
+      } else if (name.namespace === 'base') {
+        // Try to remove from each namespace
+        Object.keys(this.callbacks).forEach((namespace) => {
+          // eslint-disable-next-line max-len
+          if (this.callbacks[namespace] instanceof Object && this.callbacks[namespace][name.value] instanceof Array) {
+            delete this.callbacks[namespace][name.value];
 
             // Remove namespace if empty
-            if (!Object.keys(_namespace).length) {
+            if (Object.keys(this.callbacks[namespace]).length === 0) {
               delete this.callbacks[namespace];
             }
           }
         });
-      } else if (
-        this.callbacks[namespace] instanceof Object
-        && this.callbacks[namespace][value] instanceof Array
-      ) {
-        delete this.callbacks[namespace][value];
+      // eslint-disable-next-line max-len
+      } else if (this.callbacks[name.namespace] instanceof Object && this.callbacks[name.namespace][name.value] instanceof Array) {
+        delete this.callbacks[name.namespace][name.value];
 
         // Remove namespace if empty
-        if (!Object.keys(this.callbacks[namespace]).length) {
-          delete this.callbacks[namespace];
+        if (Object.keys(this.callbacks[name.namespace]).length === 0) {
+          delete this.callbacks[name.namespace];
         }
       }
     });
@@ -91,44 +97,57 @@ export default class EventEmitter {
   }
 
   /**
-   * input:  this.trigger('xx', [5,3])
-   * result: this.callbacks['base']['xx'] -> [c1, c2, ...]
-   *         execute c1(5,3), c2(5,3)
-   * @param {string} _names
-   * @param {Array}  _args
+   * Trigger
    */
-  trigger(_names, _args) {
-    if (typeof _names === 'undefined' || _names === '') {
-      console.warn('Invalid name');
+  trigger(_name, _args) {
+    // Errors
+    if (typeof _name === 'undefined' || _name === '') {
+      console.warn('wrong name');
       return false;
     }
 
     let finalResult = null;
+    let result = null;
 
-    // Default args[]
+    // Default args
     const args = !(_args instanceof Array) ? [] : _args;
 
-    const names = EventEmitter.resolveAllNames(_names);
-    const { namespace, value } = EventEmitter.resolveSingleName(names[0]);
+    // Resolve names (should on have one event)
+    let name = EventEmitter.resolveNames(_name);
 
-    // base, trigger
+    // Resolve name
+    name = EventEmitter.resolveName(name[0]);
 
-    if (namespace === 'base') {
-      Object.values(this.callbacks).forEach((_namespace) => {
-        if (_namespace instanceof Object && _namespace[value] instanceof Array) {
-          _namespace[value].forEach((cb) => {
-            if (typeof finalResult === 'undefined') finalResult = cb.apply(this, args);
+    // Default namespace
+    if (name.namespace === 'base') {
+      // Try to find callback in each namespace
+      // eslint-disable-next-line no-restricted-syntax
+      Object.keys(this.callbacks).forEach((namespace) => {
+        // eslint-disable-next-line max-len
+        if (this.callbacks[namespace] instanceof Object && this.callbacks[namespace][name.value] instanceof Array) {
+          this.callbacks[namespace][name.value].forEach((callback) => {
+            result = callback.apply(this, args);
+
+            if (typeof finalResult === 'undefined') {
+              console.log('Here?');
+              finalResult = result;
+            }
           });
         }
       });
-    } else if (this.callbacks[namespace] instanceof Object) {
-      if (value === '') {
-        console.warn('Invalid name');
+    } else if (this.callbacks[name.namespace] instanceof Object) {
+      if (name.value === '') {
+        console.warn('wrong name');
         return this;
       }
 
-      this.callbacks[namespace][value].forEach((cb) => {
-        if (typeof finalResult === 'undefined') finalResult = cb.apply(this, args);
+      this.callbacks[name.namespace][name.value].forEach((callback) => {
+        result = callback.apply(this, args);
+
+        if (typeof finalResult === 'undefined') {
+          console.log('Here?');
+          finalResult = result;
+        }
       });
     }
 
@@ -136,16 +155,11 @@ export default class EventEmitter {
   }
 
   /**
-   * 1. Remove any characters that do not match
-   * 2. Replace comma or forward slash with whitespace
-   * 3. Split string by whitespace
-   * example: 'xx/yy/zz' -> ['xx', 'yy', 'zz']
-   * @param {string} _names
-   * @returns {string[]}
+   * Resolve names
    */
-  static resolveAllNames(_names) {
+  static resolveNames(_names) {
     let names = _names;
-    names = names.replace(/[^a-zA-Z0-9,/.]/g, '');
+    names = names.replace(/[^a-zA-Z0-9 ,/.]/g, '');
     names = names.replace(/[,/]+/g, ' ');
     names = names.split(' ');
 
@@ -153,20 +167,22 @@ export default class EventEmitter {
   }
 
   /**
-   * ex:    'xx' -> { original: 'xx', value: 'xx', namespace: 'base' }
-   * ex: 'xx.yy' -> { original: 'xx.yy', value: 'xx', namespace: 'yy'}
-   * @param {string} _name
-   * @returns {Object}
+   * Resolve name
    */
-  static resolveSingleName(_name) {
-    const [value, namespace] = _name.split('.');
+  static resolveName(name) {
+    const newName = {};
+    const parts = name.split('.');
+    const [value, namespace] = parts;
 
-    const resolved = {
-      original: _name,
-      value,
-      namespace: namespace ?? 'base',
-    };
+    newName.original = name;
+    newName.value = value;
+    newName.namespace = 'base'; // Base namespace
 
-    return resolved;
+    // Specified namespace
+    if (parts.length > 1 && namespace !== '') {
+      newName.namespace = namespace;
+    }
+
+    return newName;
   }
 }

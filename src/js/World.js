@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
-import Materials from './World/Materials';
-import Torus from './World/Torus';
+import Materials from './world/Materials';
+import Torus from './world/Torus';
 
 /**
  * Our 3D world.
@@ -37,8 +37,11 @@ export default class World {
    * Start our world.
    */
   start() {
-    this.setMaterials();
-    this.setTorus();
+    // Wait for resources to finish loading
+    this.resources.on('ready', () => {
+      this.setMaterials();
+      this.setTorus();
+    });
   }
 
   /**
