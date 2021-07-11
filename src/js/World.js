@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import Materials from './Materials';
+import Materials from './World/Materials';
 import Torus from './World/Torus';
 
 /**
