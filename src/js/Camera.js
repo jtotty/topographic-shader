@@ -9,7 +9,7 @@ export default class Camera {
    * Constructor.
    * @param {Object} _options
    */
-  construction(_option) {
+  constructor(_option) {
     // Options
     this.time = _option.time;
     this.sizes = _option.sizes;

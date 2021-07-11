@@ -1,102 +1,102 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
-const path = require('path')
-const webpack = require('webpack')
-const dotenv = require('dotenv').config()
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const dotenv = require('dotenv').config();
 
 module.exports = {
-    entry: path.resolve(__dirname, '../src/script.js'),
-    output:
-    {
-        filename: 'bundle.[contenthash].js',
-        path: path.resolve(__dirname, '../dist')
-    },
-    devtool: 'source-map',
-    plugins:
+  entry: path.resolve(__dirname, '../src/app.js'),
+  output:
+  {
+    filename: 'bundle.[contenthash].js',
+    path: path.resolve(__dirname, '../dist'),
+  },
+  devtool: 'source-map',
+  plugins:
+  [
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, '../static') },
+      ],
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '../src/index.html'),
+      minify: true,
+    }),
+    new MiniCSSExtractPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': dotenv.parsed,
+    }),
+  ],
+  module:
+  {
+    rules:
     [
-        new CopyWebpackPlugin({
-            patterns: [
-                { from: path.resolve(__dirname, '../static') }
-            ]
-        }),
-        new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, '../src/index.html'),
-            minify: true
-        }),
-        new MiniCSSExtractPlugin(),
-        new webpack.DefinePlugin({
-            'process.env': dotenv.parsed
-        }),
-    ],
-    module:
-    {
-        rules:
+      // JS
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use:
         [
-            // JS
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use:
-                [
-                    'babel-loader'
-                ]
-            },
+          'babel-loader',
+        ],
+      },
 
-            // CSS
-            {
-                test: /\.css$/,
-                use:
-                [
-                    MiniCSSExtractPlugin.loader,
-                    'css-loader'
-                ]
-            },
+      // CSS
+      {
+        test: /\.css$/,
+        use:
+        [
+          MiniCSSExtractPlugin.loader,
+          'css-loader',
+        ],
+      },
 
-            // Images
+      // Images
+      {
+        test: /\.(jpg|png|gif|svg)$/,
+        use:
+        [
+          {
+            loader: 'file-loader',
+            options:
             {
-                test: /\.(jpg|png|gif|svg)$/,
-                use:
-                [
-                    {
-                        loader: 'file-loader',
-                        options:
-                        {
-                            outputPath: 'assets/images/',
-                        }
-                    }
-                ]
+              outputPath: 'assets/images/',
             },
+          },
+        ],
+      },
 
-            // Fonts
+      // Fonts
+      {
+        test: /\.(ttf|eot|woff|woff2)$/,
+        use:
+        [
+          {
+            loader: 'file-loader',
+            options:
             {
-                test: /\.(ttf|eot|woff|woff2)$/,
-                use:
-                [
-                    {
-                        loader: 'file-loader',
-                        options:
-                        {
-                            outputPath: 'assets/fonts/'
-                        }
-                    }
-                ]
+              outputPath: 'assets/fonts/',
             },
+          },
+        ],
+      },
 
-            // Shaders
-            {
-                test: /\.(glsl|vs|fs|vert|frag)$/,
-                exclude: /node_modules/,
-                use: [
-                    'raw-loader'
-                ]
-            },
+      // Shaders
+      {
+        test: /\.(glsl|vs|fs|vert|frag)$/,
+        exclude: /node_modules/,
+        use: [
+          'raw-loader',
+        ],
+      },
 
-            // HTML
-            {
-                test: /\.(html)$/,
-                use: ['html-loader']
-            }
-        ]
-    }
-}
+      // HTML
+      {
+        test: /\.(html)$/,
+        use: ['html-loader'],
+      },
+    ],
+  },
+};

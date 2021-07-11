@@ -37,7 +37,7 @@ export default class World {
    * Start our world.
    */
   start() {
-    this.setMaterial();
+    this.setMaterials();
     this.setTorus();
   }
 

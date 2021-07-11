@@ -64,12 +64,12 @@ export default class EventEmitter {
       if (namespace !== 'base' && value === '') {
         delete this.callbacks[namespace];
       } else if (namespace === 'base') {
-        this.callbacks.forEach((cb) => {
-          if (cb instanceof Object && cb[value] instanceof Array) {
+        Object.values(this.callbacks).forEach((_namespace) => {
+          if (_namespace instanceof Object && _namespace[value] instanceof Array) {
             delete this.callbacks[namespace][value];
 
             // Remove namespace if empty
-            if (!Object.keys(cb).length) {
+            if (!Object.keys(_namespace).length) {
               delete this.callbacks[namespace];
             }
           }
@@ -114,10 +114,10 @@ export default class EventEmitter {
     // base, trigger
 
     if (namespace === 'base') {
-      this.callbacks.forEach((cb) => {
-        if (cb instanceof Object && cb[value] instanceof Array) {
-          cb[value].forEach((fn) => {
-            if (typeof finalResult === 'undefined') finalResult = fn.apply(this, args);
+      Object.values(this.callbacks).forEach((_namespace) => {
+        if (_namespace instanceof Object && _namespace[value] instanceof Array) {
+          _namespace[value].forEach((cb) => {
+            if (typeof finalResult === 'undefined') finalResult = cb.apply(this, args);
           });
         }
       });
@@ -127,8 +127,8 @@ export default class EventEmitter {
         return this;
       }
 
-      this.callbacks[namespace][value].forEach((fn) => {
-        if (typeof finalResult === 'undefined') finalResult = fn.apply(this, args);
+      this.callbacks[namespace][value].forEach((cb) => {
+        if (typeof finalResult === 'undefined') finalResult = cb.apply(this, args);
       });
     }
 

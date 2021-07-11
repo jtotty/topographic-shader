@@ -14,6 +14,8 @@ export default class Materials {
   setMaterials() {
     const { matcapRed, matcapGold } = this.resources.items;
 
+    console.log(this.resources);
+
     this.items.matcap = {
       red: new THREE.MeshMatcapMaterial({ matcap: matcapRed }),
       gold: new THREE.MeshMatcapMaterial({ matcap: matcapGold }),
