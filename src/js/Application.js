@@ -3,7 +3,7 @@ import * as dat from 'dat.gui';
 
 import Time from './utils/Time';
 import Sizes from './utils/Sizes';
-import Resources from './utils/Resources';
+import Resources from './Resources';
 
 import Camera from './Camera';
 import World from './World';
@@ -11,12 +11,16 @@ import World from './World';
 /**
  * Our Three JS Application.
  *
- * @param {Object} _options
  */
 export default class Application {
+  /**
+   * Constructor.
+   * @param {Object} _options
+   */
   constructor(_options) {
     this.canvas = _options.canvas;
 
+    this.time = new Time();
     this.sizes = new Sizes();
     this.resources = new Resources();
 
@@ -40,9 +44,7 @@ export default class Application {
    * Start debug GUI if in debug mode.
    */
   setDebug() {
-    if (this.setConfig.debug) {
-      this.debug = new dat.GUI({ width: 420 });
-    }
+    if (this.config.debug) this.debug = new dat.GUI({ width: 420 });
   }
 
   /**
@@ -51,6 +53,7 @@ export default class Application {
   setRenderer() {
     this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
+    this.renderer.setClearColor(0x000000);
 
     const { width, height } = this.sizes.viewport;
 
@@ -75,6 +78,7 @@ export default class Application {
       sizes: this.sizes,
       debug: this.debug,
       renderer: this.renderer,
+      config: this.config,
     });
 
     this.scene.add(this.camera.container);
@@ -93,10 +97,22 @@ export default class Application {
       sizes: this.sizes,
       debug: this.debug,
       renderer: this.renderer,
+      config: this.config,
       camera: this.camera,
       resources: this.resources,
     });
 
     this.scene.add(this.world.container);
+  }
+
+  /**
+   * Desctructor
+   */
+  desctructor() {
+    this.time.off('tick');
+    this.sizes.off('resize');
+    this.camera.orbitControls.dispose();
+    this.renderer.dispose();
+    this.debug.destroy();
   }
 }

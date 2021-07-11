@@ -1,8 +1,3 @@
-/* eslint-disable no-console */
-
-/**
- * @class EventEmitter
- */
 export default class EventEmitter {
   constructor() {
     this.callbacks = { base: {} };
@@ -27,15 +22,19 @@ export default class EventEmitter {
     }
 
     // Resolve names and loop
-    EventEmitter.resolveAllNames(_names).forEach(_name => {
+    EventEmitter.resolveAllNames(_names).forEach((_name) => {
       // Resolve the name
       const { namespace, value } = EventEmitter.resolveSingleName(_name);
-      
+
       // Namespace does not exist -> set empty object
-      if (!(this.callbacks[namespace] instanceof Object)) this.callbacks[namespace] = {};
+      if (!(this.callbacks[namespace] instanceof Object)) {
+        this.callbacks[namespace] = {};
+      }
 
       // Callbacks do not exist -> set empty array
-      if (!(this.callbacks[namespace][value] instanceof Array)) this.callbacks[namespace][value] = [];
+      if (!(this.callbacks[namespace][value] instanceof Array)) {
+        this.callbacks[namespace][value] = [];
+      }
 
       // Add callback
       this.callbacks[namespace][value].push(_callback);
@@ -53,36 +52,37 @@ export default class EventEmitter {
     // Errors
     if (typeof _names === 'undefined' || _names === '') {
       console.warn('Invalid name');
-      return false
+      return false;
     }
 
     // Resolve names
-    EventEmitter.resolveAllNames(_names).forEach(_name => {
+    EventEmitter.resolveAllNames(_names).forEach((_name) => {
       // Resolve name
       const { namespace, value } = EventEmitter.resolveSingleName(_name);
 
       // Remove namepsace
       if (namespace !== 'base' && value === '') {
         delete this.callbacks[namespace];
-      } else {
-        if (namespace === 'base') {
-          this.callbacks.forEach(cb => {
-            if (cb instanceof Object && cb[value] instanceof Array) {
-              delete cb[value];
+      } else if (namespace === 'base') {
+        this.callbacks.forEach((cb) => {
+          if (cb instanceof Object && cb[value] instanceof Array) {
+            delete this.callbacks[namespace][value];
 
-              // Remove namespace if empty
-              if (!Object.keys(cb).length) {
-                delete cb;
-              }
+            // Remove namespace if empty
+            if (!Object.keys(cb).length) {
+              delete this.callbacks[namespace];
             }
-          });
-        } else if (this.callbacks[namespace] instanceof Object && this.callbacks[namespace][value] instanceof Array) {
-          delete this.callbacks[namespace][value];
-
-          // Remove namespace if empty
-          if (!Object.keys(this.callbacks[namespace]).length) {
-            delete this.callbacks[namespace];
           }
+        });
+      } else if (
+        this.callbacks[namespace] instanceof Object
+        && this.callbacks[namespace][value] instanceof Array
+      ) {
+        delete this.callbacks[namespace][value];
+
+        // Remove namespace if empty
+        if (!Object.keys(this.callbacks[namespace]).length) {
+          delete this.callbacks[namespace];
         }
       }
     });
@@ -95,7 +95,7 @@ export default class EventEmitter {
    * result: this.callbacks['base']['xx'] -> [c1, c2, ...]
    *         execute c1(5,3), c2(5,3)
    * @param {string} _names
-   * @param {Array}  _args 
+   * @param {Array}  _args
    */
   trigger(_names, _args) {
     if (typeof _names === 'undefined' || _names === '') {
@@ -114,9 +114,9 @@ export default class EventEmitter {
     // base, trigger
 
     if (namespace === 'base') {
-      this.callbacks.forEach(cb => {
+      this.callbacks.forEach((cb) => {
         if (cb instanceof Object && cb[value] instanceof Array) {
-          cb[value].forEach(fn => {
+          cb[value].forEach((fn) => {
             if (typeof finalResult === 'undefined') finalResult = fn.apply(this, args);
           });
         }
@@ -127,7 +127,7 @@ export default class EventEmitter {
         return this;
       }
 
-      this.callbacks[namespace][value].forEach(fn => {
+      this.callbacks[namespace][value].forEach((fn) => {
         if (typeof finalResult === 'undefined') finalResult = fn.apply(this, args);
       });
     }
@@ -154,7 +154,7 @@ export default class EventEmitter {
 
   /**
    * ex:    'xx' -> { original: 'xx', value: 'xx', namespace: 'base' }
-   * ex: 'xx.yy' -> { original: 'xx.yy', value: 'xx', namespace: 'yy'} 
+   * ex: 'xx.yy' -> { original: 'xx.yy', value: 'xx', namespace: 'yy'}
    * @param {string} _name
    * @returns {Object}
    */
@@ -163,7 +163,7 @@ export default class EventEmitter {
 
     const resolved = {
       original: _name,
-      value: value,
+      value,
       namespace: namespace ?? 'base',
     };
 
