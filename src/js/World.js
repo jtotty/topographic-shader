@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 import Materials from './world/Materials';
 import Torus from './world/Torus';
+import Plane from './world/Plane';
 
 /**
  * Our 3D world.
@@ -40,7 +41,7 @@ export default class World {
     // Wait for resources to finish loading
     this.resources.on('ready', () => {
       this.setMaterials();
-      this.setTorus();
+      this.setPlane();
     });
   }
 
@@ -63,5 +64,18 @@ export default class World {
     });
 
     this.container.add(this.torus.container);
+  }
+
+  /**
+   * Add our Plane to the world.
+   */
+  setPlane() {
+    this.plane = new Plane({
+      material: this.material,
+      time: this.time,
+      debug: this.debugFolder,
+    });
+
+    this.container.add(this.plane.container);
   }
 }

@@ -1,0 +1,31 @@
+import * as THREE from 'three';
+
+export default class Plane {
+  constructor(_option) {
+    this.material = _option.material;
+    this.time = _option.time;
+    this.debug = _option.debug;
+
+    this.container = new THREE.Object3D();
+    this.container.matrixAutoUpdate = false;
+
+    if (this.debug) {
+      this.debugFolder = this.debug.addFolder('plane');
+      this.debugFolder.open();
+    }
+
+    this.setPlane();
+  }
+
+  setPlane() {
+    const geometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+    geometry.rotateX(-Math.PI * 0.5);
+
+    const material = this.material.items.shader.plane;
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.scale.set(10, 10, 10);
+
+    this.container.add(mesh);
+    this.container.updateMatrix();
+  }
+}
