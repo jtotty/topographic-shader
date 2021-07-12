@@ -8,6 +8,9 @@ export default function PlaneMaterial() {
   };
 
   const material = new THREE.ShaderMaterial({
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    side: THREE.DoubleSide,
     vertexShader,
     fragmentShader,
     uniforms,

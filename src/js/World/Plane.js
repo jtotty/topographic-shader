@@ -18,7 +18,7 @@ export default class Plane {
   }
 
   setPlane() {
-    const geometry = new THREE.PlaneGeometry(1, 1, 100, 100);
+    const geometry = new THREE.PlaneGeometry(1, 1, 1000, 1000);
     geometry.rotateX(-Math.PI * 0.5);
 
     const material = this.material.items.shader.plane;
