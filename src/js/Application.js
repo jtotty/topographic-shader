@@ -36,14 +36,22 @@ export default class Application {
    * If anchor part of a URL contains "debug".
    */
   setConfig() {
-    this.config = { debug: window.location.hash === '#debug' };
+    this.config = {
+      debug: window.location.hash === '#debug',
+      clearColor: 0x1a1d28,
+      shader: {
+        elevation: 2,
+      },
+    };
   }
 
   /**
    * Start debug GUI if in debug mode.
    */
   setDebug() {
-    if (this.config.debug) this.debug = new dat.GUI();
+    if (this.config.debug) {
+      this.debug = new dat.GUI();
+    }
   }
 
   /**
@@ -55,7 +63,19 @@ export default class Application {
       canvas: this.canvas,
       antialias: true,
     });
-    this.renderer.setClearColor(0x000000);
+    this.renderer.setClearColor(this.config.clearColor);
+
+    if (this.debug) {
+      this.debugFolder = this.debug.addFolder('App');
+
+      this.debugFolder
+        .addColor(this.config, 'clearColor')
+        .onChange(() => {
+          this.renderer.setClearColor(this.config.clearColor);
+        });
+
+      this.debugFolder.open();
+    }
 
     Application.resize(this.renderer, this.sizes.viewport);
 

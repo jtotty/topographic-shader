@@ -25,11 +25,6 @@ export default class World {
     this.container = new THREE.Object3D();
     this.container.matrixAutoUpdate = false;
 
-    if (this.debug) {
-      this.debugFolder = this.debug.addFolder('world');
-      this.debugFolder.open();
-    }
-
     // Lets go!
     this.start();
   }
@@ -51,6 +46,8 @@ export default class World {
   setMaterials() {
     this.material = new Materials({
       resources: this.resources,
+      debug: this.debug,
+      config: this.config,
     });
   }
 

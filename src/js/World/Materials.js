@@ -3,6 +3,8 @@ import PlaneMaterial from '../materials/PlaneMaterial';
 
 export default class Materials {
   constructor(_option) {
+    this.debug = _option.debug;
+    this.config = _option.config;
     this.resources = _option.resources;
     this.items = {};
 
@@ -21,7 +23,7 @@ export default class Materials {
     };
 
     this.items.shader = {
-      plane: new PlaneMaterial(),
+      plane: new PlaneMaterial(this.debug, this.config),
     };
   }
 }
