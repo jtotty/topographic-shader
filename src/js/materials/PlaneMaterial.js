@@ -93,10 +93,12 @@ export default function PlaneMaterial(debug, config) {
   };
 
   if (debug) {
-    const debugFolder = debug.addFolder('Shader');
-    debugFolder
-      .add(uniforms.uElevation, 'value').min(0).max(5).step(0.001);
-    debugFolder.open();
+    const debugFolder = debug.addFolder({ title: 'Shader', expanded: true });
+    debugFolder.addInput(uniforms.uElevation, 'value', {
+      min: 0,
+      max: 5,
+      step: 0.001,
+    });
   }
 
   const material = new THREE.ShaderMaterial({

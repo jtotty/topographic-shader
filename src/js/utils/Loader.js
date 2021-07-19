@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import * as THREE from 'three';
 import EventEmitter from './EventEmitter';
 

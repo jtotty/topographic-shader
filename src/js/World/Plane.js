@@ -10,8 +10,7 @@ export default class Plane {
     this.container.matrixAutoUpdate = false;
 
     if (this.debug) {
-      this.debugFolder = this.debug.addFolder('plane');
-      this.debugFolder.open();
+      this.debugFolder = this.debug.addFolder({ title: 'plane', expanded: true });
     }
 
     this.setPlane();

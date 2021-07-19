@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import * as dat from 'dat.gui';
+import { Pane } from 'tweakpane';
 
 import Time from './utils/Time';
 import Sizes from './utils/Sizes';
@@ -50,7 +50,7 @@ export default class Application {
    */
   setDebug() {
     if (this.config.debug) {
-      this.debug = new dat.GUI();
+      this.debug = new Pane();
     }
   }
 
@@ -66,15 +66,14 @@ export default class Application {
     this.renderer.setClearColor(this.config.clearColor);
 
     if (this.debug) {
-      this.debugFolder = this.debug.addFolder('App');
+      this.debugFolder = this.debug.addFolder({ title: 'App', expanded: true });
 
       this.debugFolder
-        .addColor(this.config, 'clearColor')
-        .onChange(() => {
-          this.renderer.setClearColor(this.config.clearColor);
+        .addInput(this.config, 'clearColor')
+        .on('change', (ev) => {
+          console.log(ev);
+          // this.renderer.setClearColor(ev.clearColor);
         });
-
-      this.debugFolder.open();
     }
 
     Application.resize(this.renderer, this.sizes.viewport);

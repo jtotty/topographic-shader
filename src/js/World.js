@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 
 import Materials from './world/Materials';
-import Torus from './world/Torus';
 import Plane from './world/Plane';
 
 /**
@@ -49,18 +48,6 @@ export default class World {
       debug: this.debug,
       config: this.config,
     });
-  }
-
-  /**
-   * Add our Torus to the world.
-   */
-  setTorus() {
-    this.torus = new Torus({
-      material: this.material,
-      debug: this.debugFolder,
-    });
-
-    this.container.add(this.torus.container);
   }
 
   /**
