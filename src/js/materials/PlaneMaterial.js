@@ -3,6 +3,62 @@ import * as THREE from 'three';
 import vertexShader from '../../shaders/vertex.glsl';
 import fragmentShader from '../../shaders/fragment.glsl';
 
+/**
+ * Setup our debug UI folder for the Plane Material.
+ *
+ * @param {Object} debug
+ * @param {Object} uniforms
+ * @param {Object} terrain
+ */
+const setupDebug = (debug, uniforms, terrain) => {
+  const debugFolder = debug.addFolder({ title: 'Shader', expanded: true });
+
+  debugFolder.addInput(uniforms.uElevation, 'value', {
+    min: 0,
+    max: 5,
+    step: 0.001,
+  });
+
+  debugFolder.addInput(terrain.texture, 'linesCount', {
+    min: 1,
+    max: 10,
+    step: 1,
+  }).on('change', () => {
+    terrain.texture.update();
+  });
+
+  debugFolder.addInput(terrain.texture, 'thickLineHeight', {
+    min: 0,
+    max: 0.1,
+    step: 0.0001,
+  }).on('change', () => {
+    terrain.texture.update();
+  });
+
+  debugFolder.addInput(terrain.texture, 'thinLineHeight', {
+    min: 0,
+    max: 0.1,
+    step: 0.0001,
+  }).on('change', () => {
+    terrain.texture.update();
+  });
+
+  debugFolder.addInput(terrain.texture, 'thinLineAlhpa', {
+    min: 0,
+    max: 1,
+    step: 0.001,
+  }).on('change', () => {
+    terrain.texture.update();
+  });
+};
+
+/**
+ * Our plane material.
+ *
+ * @param {Object} debug
+ * @param {Object} config
+ * @returns {THREE.ShaderMaterial} material
+ */
 export default function PlaneMaterial(debug, config) {
   const terrain = {
     texture: {
@@ -11,6 +67,7 @@ export default function PlaneMaterial(debug, config) {
       linesCount: 5,
       thickLineHeight: 0.04,
       thinLineHeight: 0.01,
+      thinLineAlhpa: 0.5,
     },
   };
 
@@ -58,8 +115,9 @@ export default function PlaneMaterial(debug, config) {
     const actualThinLineHeight = Math.round(
       Math.round(terrain.texture.height * terrain.texture.thinLineHeight),
     );
+
     for (let i = 0; i < terrain.texture.linesCount - 1; i++) {
-      terrain.texture.context.globalAlpha = 0.5;
+      terrain.texture.context.globalAlpha = terrain.texture.thinLineAlhpa;
       terrain.texture.context.fillRect(
         0,
         actualThickLineHeight + Math.round(
@@ -82,6 +140,8 @@ export default function PlaneMaterial(debug, config) {
     // terrain.texture.context.fillRect(
     //   0, Math.round(terrain.texture.height * 0.9), terrain.texture.width, 4,
     // );
+
+    terrain.texture.instance.needsUpdate = true;
   };
 
   terrain.texture.update();
@@ -93,12 +153,7 @@ export default function PlaneMaterial(debug, config) {
   };
 
   if (debug) {
-    const debugFolder = debug.addFolder({ title: 'Shader', expanded: true });
-    debugFolder.addInput(uniforms.uElevation, 'value', {
-      min: 0,
-      max: 5,
-      step: 0.001,
-    });
+    setupDebug(debug, uniforms, terrain);
   }
 
   const material = new THREE.ShaderMaterial({

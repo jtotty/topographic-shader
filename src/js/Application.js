@@ -7,6 +7,7 @@ import Resources from './Resources';
 
 import Camera from './Camera';
 import World from './World';
+import PostProcessing from './PostProcessing';
 
 /**
  * Our Three JS Application.
@@ -29,6 +30,7 @@ export default class Application {
     this.setRenderer();
     this.setCamera();
     this.setWorld();
+    this.setPostProcessing();
   }
 
   /**
@@ -97,9 +99,9 @@ export default class Application {
 
     this.scene.add(this.camera.container);
 
-    this.time.on('tick', () => {
-      this.renderer.render(this.scene, this.camera.instance);
-    });
+    // this.time.on('tick', () => {
+    //   this.renderer.render(this.scene, this.camera.instance);
+    // });
   }
 
   /**
@@ -117,6 +119,22 @@ export default class Application {
     });
 
     this.scene.add(this.world.container);
+  }
+
+  /**
+   * Add our post processing.
+   */
+  setPostProcessing() {
+    this.postProcessing = new PostProcessing({
+      sizes: this.sizes,
+      renderer: this.renderer,
+      camera: this.camera,
+      scene: this.scene,
+    });
+
+    this.time.on('tick', () => {
+      this.postProcessing.effectComposer.render();
+    });
   }
 
   /**
