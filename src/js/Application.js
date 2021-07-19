@@ -68,12 +68,12 @@ export default class Application {
     if (this.debug) {
       this.debugFolder = this.debug.addFolder({ title: 'App', expanded: true });
 
-      this.debugFolder
-        .addInput(this.config, 'clearColor')
-        .on('change', (ev) => {
-          console.log(ev);
-          // this.renderer.setClearColor(ev.clearColor);
-        });
+      this.debugFolder.addInput(this.config, 'clearColor', {
+        label: 'Clear Color',
+        view: 'color',
+      }).on('change', (event) => {
+        this.renderer.setClearColor(event.value);
+      });
     }
 
     Application.resize(this.renderer, this.sizes.viewport);
