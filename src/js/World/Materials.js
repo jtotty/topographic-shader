@@ -23,7 +23,7 @@ export default class Materials {
     };
 
     this.items.shader = {
-      plane: new PlaneMaterial(this.debug, this.config),
+      plane: PlaneMaterial(this.debug, this.config),
     };
   }
 }
