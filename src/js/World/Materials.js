@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import PlaneMaterial from '../materials/PlaneMaterial';
 
 export default class Materials {
@@ -15,13 +14,6 @@ export default class Materials {
    * Add our materials.
    */
   setMaterials() {
-    const { matcapRed, matcapGold } = this.resources.items;
-
-    this.items.matcap = {
-      red: new THREE.MeshMatcapMaterial({ matcap: matcapRed }),
-      gold: new THREE.MeshMatcapMaterial({ matcap: matcapGold }),
-    };
-
     this.items.shader = {
       plane: PlaneMaterial(this.debug, this.config),
     };

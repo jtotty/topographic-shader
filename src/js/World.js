@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-
 import Materials from './world/Materials';
 import Plane from './world/Plane';
 
@@ -33,10 +32,10 @@ export default class World {
    */
   start() {
     // Wait for resources to finish loading
-    this.resources.on('ready', () => {
-      this.setMaterials();
-      this.setPlane();
-    });
+    // this.resources.on('ready', () => {});
+
+    this.setMaterials();
+    this.setPlane();
   }
 
   /**

@@ -1,9 +1,6 @@
 import EventEmitter from './utils/EventEmitter';
 import Loader from './utils/Loader';
 
-import matcapRedSource from '../models/matcaps/red.png';
-import matcapGoldSource from '../models/matcaps/gold.png';
-
 export default class Resources extends EventEmitter {
   constructor() {
     super();
@@ -26,9 +23,6 @@ export default class Resources extends EventEmitter {
       this.trigger('ready');
     });
 
-    this.loader.load([
-      { name: 'matcapRed', source: matcapRedSource },
-      { name: 'matcapGold', source: matcapGoldSource },
-    ]);
+    // this.loader.load([]);
   }
 }

@@ -129,7 +129,6 @@ export default class EventEmitter {
             result = callback.apply(this, args);
 
             if (typeof finalResult === 'undefined') {
-              console.log('Here?');
               finalResult = result;
             }
           });
@@ -145,7 +144,6 @@ export default class EventEmitter {
         result = callback.apply(this, args);
 
         if (typeof finalResult === 'undefined') {
-          console.log('Here?');
           finalResult = result;
         }
       });
