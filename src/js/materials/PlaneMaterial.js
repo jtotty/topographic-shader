@@ -2,6 +2,8 @@
 import * as THREE from 'three';
 import vertexShader from '../../shaders/vertex.glsl';
 import fragmentShader from '../../shaders/fragment.glsl';
+import terrainVertexShader from '../../shaders/terrain/vertex.glsl';
+import terrainFragmentShader from '../../shaders/terrain/fragment.glsl';
 
 /**
  * Setup our debug UI folder for the Plane Material.
@@ -13,7 +15,7 @@ import fragmentShader from '../../shaders/fragment.glsl';
 const setupDebug = (debug, uniforms, terrain) => {
   const debugFolder = debug.addFolder({ title: 'Shader', expanded: true });
 
-  debugFolder.addInput(uniforms.uElevation, 'value', {
+  debugFolder.addInput(terrain.uniforms.uElevation, 'value', {
     label: 'elevation',
     min: 0,
     max: 10,
@@ -154,7 +156,8 @@ export default function PlaneMaterial(debug, config) {
 
   terrain.texture.update();
 
-  const uniforms = {
+  // Uniforms
+  terrain.uniforms = {
     uTime: { value: 0 },
     uElevation: { value: config.shader.elevation },
     uTexture: { value: terrain.texture.instance },
@@ -162,13 +165,26 @@ export default function PlaneMaterial(debug, config) {
   };
 
   terrain.material = new THREE.ShaderMaterial({
+    vertexShader,
+    fragmentShader,
     transparent: true,
     blending: THREE.AdditiveBlending,
     side: THREE.DoubleSide,
-    vertexShader,
-    fragmentShader,
+    uniforms: terrain.uniforms,
+  });
+
+  const uniforms = THREE.UniformsUtils.merge([
+    THREE.UniformsLib.common,
+    THREE.UniformsLib.displacementmap,
+  ]);
+
+  terrain.depthMaterial = new THREE.ShaderMaterial({
+    vertexShader: terrainVertexShader,
+    fragmentShader: terrainFragmentShader,
     uniforms,
   });
+  terrain.depthMaterial.depthPacking = THREE.RGBADepthPacking;
+  terrain.depthMaterial.blending = THREE.NoBlending;
 
   if (debug) setupDebug(debug, uniforms, terrain);
 

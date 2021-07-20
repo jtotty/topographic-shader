@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 
 export default class Plane {
+  /**
+   * Constructor.
+   * @param {Object} _option
+   */
   constructor(_option) {
     this.material = _option.material;
     this.time = _option.time;
@@ -16,6 +20,9 @@ export default class Plane {
     this.setPlane();
   }
 
+  /**
+   * Create our plane.
+   */
   setPlane() {
     const geometry = new THREE.PlaneGeometry(1, 1, 1000, 1000);
     geometry.rotateX(-Math.PI * 0.5);
@@ -27,8 +34,8 @@ export default class Plane {
     this.container.updateMatrix();
 
     // Animate our plane shader
-    this.time.on('tick', () => {
-      this.material.items.shader.plane.uniforms.uTime.value = this.time.elapsed;
-    });
+    // this.time.on('tick', () => {
+    //   this.material.items.shader.plane.uniforms.uTime.value = this.time.elapsed;
+    // });
   }
 }

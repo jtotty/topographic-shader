@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass';
+import BokehPass from './passes/BokehPass';
 
 /**
  * Our post processing. Let the magic happen! 🌟
@@ -53,6 +53,7 @@ export default class PostProcessing {
         height: this.sizes.height * this.sizes.pixelRatio,
       },
     );
+    this.bokehPass.enabled = false;
 
     if (this.debug) this.setupDebug();
 

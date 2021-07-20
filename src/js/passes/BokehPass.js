@@ -15,8 +15,13 @@ import { BokehShader } from 'three/examples/jsm/shaders/BokehShader';
 /**
  * Depth-of-field post-process with bokeh shader
  */
-
 export default class BokehPass extends Pass {
+  /**
+   * Constructor.
+   * @param {THREE.scene}  scene
+   * @param {THREE.Camera} camera
+   * @param {Object}       params
+   */
   constructor(scene, camera, params) {
     super();
 
@@ -75,14 +80,21 @@ export default class BokehPass extends Pass {
     this.oldClearColor = new Color();
   }
 
-  render(renderer, writeBuffer, readBuffer) {
+  /**
+   * Render.
+   * @param {*} renderer
+   * @param {*} writeBuffer
+   * @param {*} readBuffer
+   */
+  render(_renderer, writeBuffer, readBuffer) {
     // Render depth into texture
     this.scene.overrideMaterial = this.materialDepth;
+
+    const renderer = _renderer;
 
     renderer.getClearColor(this.oldClearColor);
     const oldClearAlpha = renderer.getClearAlpha();
     const oldAutoClear = renderer.autoClear;
-    // eslint-disable-next-line no-param-reassign
     renderer.autoClear = false;
 
     renderer.setClearColor(0xffffff);
@@ -93,8 +105,8 @@ export default class BokehPass extends Pass {
 
     // Render bokeh composite
     this.uniforms.tColor.value = readBuffer.texture;
-    this.uniformsnearClip.value = this.camera.near;
-    this.uniformsfarClip.value = this.camera.far;
+    this.uniforms.nearClip.value = this.camera.near;
+    this.uniforms.farClip.value = this.camera.far;
 
     if (this.renderToScreen) {
       renderer.setRenderTarget(null);
@@ -108,7 +120,6 @@ export default class BokehPass extends Pass {
     this.scene.overrideMaterial = null;
     renderer.setClearColor(this.oldClearColor);
     renderer.setClearAlpha(oldClearAlpha);
-    // eslint-disable-next-line no-param-reassign
     renderer.autoClear = oldAutoClear;
   }
 }
