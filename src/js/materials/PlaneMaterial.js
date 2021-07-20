@@ -1,9 +1,9 @@
 /* eslint-disable no-plusplus */
 import * as THREE from 'three';
-import vertexShader from '../../shaders/vertex.glsl';
-import fragmentShader from '../../shaders/fragment.glsl';
 import terrainVertexShader from '../../shaders/terrain/vertex.glsl';
 import terrainFragmentShader from '../../shaders/terrain/fragment.glsl';
+import terrainDepthVertexShader from '../../shaders/terrainDepth/vertex.glsl';
+import terrainDepthFragmentShader from '../../shaders/terrainDepth/fragment.glsl';
 
 /**
  * Setup our debug UI folder for the Plane Material.
@@ -165,8 +165,8 @@ export default function PlaneMaterial(debug, config) {
   };
 
   terrain.material = new THREE.ShaderMaterial({
-    vertexShader,
-    fragmentShader,
+    vertexShader: terrainVertexShader,
+    fragmentShader: terrainFragmentShader,
     transparent: true,
     blending: THREE.AdditiveBlending,
     side: THREE.DoubleSide,
@@ -179,8 +179,8 @@ export default function PlaneMaterial(debug, config) {
   ]);
 
   terrain.depthMaterial = new THREE.ShaderMaterial({
-    vertexShader: terrainVertexShader,
-    fragmentShader: terrainFragmentShader,
+    vertexShader: terrainDepthVertexShader,
+    fragmentShader: terrainDepthFragmentShader,
     uniforms,
   });
   terrain.depthMaterial.depthPacking = THREE.RGBADepthPacking;
