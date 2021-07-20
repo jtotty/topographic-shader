@@ -121,7 +121,7 @@ export default function PlaneMaterial(debug, config) {
 
     // Thinner lines
     const actualThinLineHeight = Math.round(
-      Math.round(terrain.texture.height * terrain.texture.thinLineHeight),
+      terrain.texture.height * terrain.texture.thinLineHeight,
     );
 
     for (let i = 0; i < terrain.texture.linesCount - 1; i++) {

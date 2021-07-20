@@ -40,7 +40,7 @@ export default class Application {
   setConfig() {
     this.config = {
       debug: window.location.hash === '#debug',
-      clearColor: 0x1a1d28,
+      clearColor: '#1d295c',
       shader: {
         elevation: 2,
       },

@@ -84,8 +84,8 @@ varying float vElevation;
 float getElevation(vec2 position) {
   float elevation = 0.0;
 
-  // position.x += uTime * 0.001;
-  // position.y += uTime * 0.001;
+  position.x += uTime * 0.0001;
+  position.y += uTime * 0.0001;
 
   // General elevation
   elevation += cnoise(vec3(
