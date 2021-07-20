@@ -14,8 +14,9 @@ const setupDebug = (debug, uniforms, terrain) => {
   const debugFolder = debug.addFolder({ title: 'Shader', expanded: true });
 
   debugFolder.addInput(uniforms.uElevation, 'value', {
+    label: 'elevation',
     min: 0,
-    max: 5,
+    max: 10,
     step: 0.001,
   });
 
@@ -49,6 +50,13 @@ const setupDebug = (debug, uniforms, terrain) => {
     step: 0.001,
   }).on('change', () => {
     terrain.texture.update();
+  });
+
+  debugFolder.addInput(terrain.material.uniforms.uTextureFrequency, 'value', {
+    label: 'frequency',
+    min: 0.01,
+    max: 50,
+    step: 0.01,
   });
 };
 
@@ -150,13 +158,10 @@ export default function PlaneMaterial(debug, config) {
     uTime: { value: 0 },
     uElevation: { value: config.shader.elevation },
     uTexture: { value: terrain.texture.instance },
+    uTextureFrequency: { value: 10 },
   };
 
-  if (debug) {
-    setupDebug(debug, uniforms, terrain);
-  }
-
-  const material = new THREE.ShaderMaterial({
+  terrain.material = new THREE.ShaderMaterial({
     transparent: true,
     blending: THREE.AdditiveBlending,
     side: THREE.DoubleSide,
@@ -165,5 +170,7 @@ export default function PlaneMaterial(debug, config) {
     uniforms,
   });
 
-  return material;
+  if (debug) setupDebug(debug, uniforms, terrain);
+
+  return terrain.material;
 }

@@ -130,6 +130,7 @@ export default class Application {
       renderer: this.renderer,
       camera: this.camera,
       scene: this.scene,
+      debug: this.debug,
     });
 
     this.time.on('tick', () => {
@@ -153,8 +154,8 @@ export default class Application {
    * @param {THREE.WebGLRenderer} renderer
    * @param {Object}              viewport
    */
-  static resize(renderer, { width, height }) {
+  static resize(renderer, { width, height, pixelRatio }) {
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(pixelRatio);
   }
 }
