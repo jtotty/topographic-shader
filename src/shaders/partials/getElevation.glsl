@@ -1,4 +1,10 @@
 uniform float uElevation;
+uniform float uElevationValleyFrequency;
+uniform float uElevationValley;
+uniform float uElevationGeneral;
+uniform float uElevationGeneralFrequency;
+uniform float uElevationDetails;
+uniform float uElevationDetailsFrequency;
 
 #pragma glslify: getPerlinNoise3d = require('../partials/getPerlinNoise3d.glsl')
 

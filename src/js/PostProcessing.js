@@ -47,13 +47,15 @@ export default class PostProcessing {
       this.camera.instance,
       {
         focus: 1.0,
-        aperture: 0.025,
-        maxblur: 0.01,
+        aperture: 0.0013,
+        maxblur: 0.004,
         width: this.sizes.width * this.sizes.pixelRatio,
         height: this.sizes.height * this.sizes.pixelRatio,
       },
     );
-    this.bokehPass.enabled = false;
+
+    // Pass our terrain depth material to the bokeh pass
+    this.bokehPass.materialDepth = window.topo.terrain.depthMaterial;
 
     if (this.debug) this.setupDebug();
 

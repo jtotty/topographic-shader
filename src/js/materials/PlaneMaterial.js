@@ -15,7 +15,7 @@ import terrainDepthFragmentShader from '../../shaders/terrainDepth/fragment.glsl
 const setupDebug = (debug, uniforms, terrain) => {
   const debugFolder = debug.addFolder({ title: 'Shader', expanded: true });
 
-  debugFolder.addInput(terrain.uniforms.uElevation, 'value', {
+  debugFolder.addInput(uniforms.uElevation, 'value', {
     label: 'elevation',
     min: 0,
     max: 10,
@@ -165,28 +165,33 @@ export default function PlaneMaterial(debug, config) {
   };
 
   terrain.material = new THREE.ShaderMaterial({
+    uniforms: terrain.uniforms,
     vertexShader: terrainVertexShader,
     fragmentShader: terrainFragmentShader,
     transparent: true,
     blending: THREE.AdditiveBlending,
     side: THREE.DoubleSide,
-    uniforms: terrain.uniforms,
   });
 
-  const uniforms = THREE.UniformsUtils.merge([
+  terrain.depthUniforms = THREE.UniformsUtils.merge([
     THREE.UniformsLib.common,
     THREE.UniformsLib.displacementmap,
+    terrain.uniforms,
   ]);
 
   terrain.depthMaterial = new THREE.ShaderMaterial({
+    uniforms: terrain.depthUniforms,
     vertexShader: terrainDepthVertexShader,
     fragmentShader: terrainDepthFragmentShader,
-    uniforms,
   });
+
   terrain.depthMaterial.depthPacking = THREE.RGBADepthPacking;
   terrain.depthMaterial.blending = THREE.NoBlending;
 
-  if (debug) setupDebug(debug, uniforms, terrain);
+  if (debug) setupDebug(debug, terrain.uniforms, terrain);
+
+  // Assing to our global object
+  window.topo.terrain = terrain;
 
   return terrain.material;
 }

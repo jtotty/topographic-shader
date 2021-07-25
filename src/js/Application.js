@@ -25,6 +25,9 @@ export default class Application {
     this.sizes = new Sizes();
     this.resources = new Resources();
 
+    // Instantiatite our global object container on the window
+    window.topo = {};
+
     this.setConfig();
     this.setDebug();
     this.setRenderer();
@@ -40,7 +43,7 @@ export default class Application {
   setConfig() {
     this.config = {
       debug: window.location.hash === '#debug',
-      clearColor: '#1d295c',
+      clearColor: '#1d1d1f',
       shader: {
         elevation: 2,
       },

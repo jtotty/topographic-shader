@@ -7,7 +7,7 @@ varying float vElevation;
 void main() {
   vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-  float elevation = getElevation(modelPosition.xz);
+  float elevation = getElevation(modelPosition.xz + vec2(uTime * 0.03, uTime * 0.1));
   modelPosition.y += elevation;
 
   vec4 viewPosition = viewMatrix * modelPosition;
