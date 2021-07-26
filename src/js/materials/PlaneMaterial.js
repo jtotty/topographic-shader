@@ -13,16 +13,16 @@ import terrainDepthFragmentShader from '../../shaders/terrainDepth/fragment.glsl
  * @param {Object} terrain
  */
 const setupDebug = (debug, uniforms, terrain) => {
-  const debugFolder = debug.addFolder({ title: 'Shader', expanded: true });
+  const shaderOptions = debug.addFolder({ title: 'Shader', expanded: true });
 
-  debugFolder.addInput(uniforms.uElevation, 'value', {
+  shaderOptions.addInput(uniforms.uElevation, 'value', {
     label: 'elevation',
     min: 0,
     max: 10,
     step: 0.001,
   });
 
-  debugFolder.addInput(terrain.texture, 'linesCount', {
+  shaderOptions.addInput(terrain.texture, 'linesCount', {
     min: 1,
     max: 10,
     step: 1,
@@ -30,7 +30,7 @@ const setupDebug = (debug, uniforms, terrain) => {
     terrain.texture.update();
   });
 
-  debugFolder.addInput(terrain.texture, 'thickLineHeight', {
+  shaderOptions.addInput(terrain.texture, 'thickLineHeight', {
     min: 0,
     max: 0.1,
     step: 0.0001,
@@ -38,7 +38,7 @@ const setupDebug = (debug, uniforms, terrain) => {
     terrain.texture.update();
   });
 
-  debugFolder.addInput(terrain.texture, 'thinLineHeight', {
+  shaderOptions.addInput(terrain.texture, 'thinLineHeight', {
     min: 0,
     max: 0.1,
     step: 0.0001,
@@ -46,7 +46,7 @@ const setupDebug = (debug, uniforms, terrain) => {
     terrain.texture.update();
   });
 
-  debugFolder.addInput(terrain.texture, 'thinLineAlhpa', {
+  shaderOptions.addInput(terrain.texture, 'thinLineAlhpa', {
     min: 0,
     max: 1,
     step: 0.001,
@@ -54,9 +54,60 @@ const setupDebug = (debug, uniforms, terrain) => {
     terrain.texture.update();
   });
 
-  debugFolder.addInput(terrain.material.uniforms.uTextureFrequency, 'value', {
+  shaderOptions.addInput(terrain.material.uniforms.uTextureFrequency, 'value', {
     label: 'frequency',
     min: 0.01,
+    max: 50,
+    step: 0.01,
+  });
+
+  const hueOptions = debug.addFolder({ title: 'Hue', expanded: true });
+
+  hueOptions.addInput(terrain.material.uniforms.uHslHue, 'value', {
+    label: 'Hue',
+    min: 0,
+    max: 5,
+    step: 0.001,
+  });
+
+  hueOptions.addInput(terrain.material.uniforms.uHslHueOffset, 'value', {
+    label: 'Offset',
+    min: 0,
+    max: 1,
+    step: 0.001,
+  });
+
+  hueOptions.addInput(terrain.material.uniforms.uHslHueFrequency, 'value', {
+    label: 'Frequency',
+    min: 0,
+    max: 50,
+    step: 0.01,
+  });
+
+  hueOptions.addInput(terrain.material.uniforms.uHslTimeFrequency, 'value', {
+    label: 'timeFrequency',
+    min: 0,
+    max: 0.0001,
+    step: 0.00001,
+  });
+
+  hueOptions.addInput(terrain.material.uniforms.uHslLightness, 'value', {
+    label: 'Lightness',
+    min: 0,
+    max: 1,
+    step: 0.001,
+  });
+
+  hueOptions.addInput(terrain.material.uniforms.uHslLightnessVariation, 'value', {
+    label: 'LightnessVariation',
+    min: 0,
+    max: 1,
+    step: 0.001,
+  });
+
+  hueOptions.addInput(terrain.material.uniforms.uHslLightnessFrequency, 'value', {
+    label: 'lightnessFrequency',
+    min: 0,
     max: 50,
     step: 0.01,
   });
@@ -128,6 +179,7 @@ export default function PlaneMaterial(debug, config) {
 
     for (let i = 0; i < terrain.texture.linesCount - 1; i++) {
       terrain.texture.context.globalAlpha = terrain.texture.thinLineAlhpa;
+      terrain.texture.context.fillStyle = '#00ffff';
       terrain.texture.context.fillRect(
         0,
         actualThickLineHeight + Math.round(
@@ -162,6 +214,13 @@ export default function PlaneMaterial(debug, config) {
     uElevation: { value: config.shader.elevation },
     uTexture: { value: terrain.texture.instance },
     uTextureFrequency: { value: 10 },
+    uHslHue: { value: 1 },
+    uHslHueOffset: { value: 0 },
+    uHslHueFrequency: { value: 10 },
+    uHslTimeFrequency: { value: 0.00005 },
+    uHslLightness: { value: 0.75 },
+    uHslLightnessVariation: { value: 0.25 },
+    uHslLightnessFrequency: { value: 20 },
   };
 
   // Material for our topographic effect
@@ -170,7 +229,7 @@ export default function PlaneMaterial(debug, config) {
     vertexShader: terrainVertexShader,
     fragmentShader: terrainFragmentShader,
     transparent: true,
-    blending: THREE.AdditiveBlending,
+    // blending: THREE.AdditiveBlending,
     side: THREE.DoubleSide,
   });
 

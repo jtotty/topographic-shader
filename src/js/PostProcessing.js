@@ -48,7 +48,7 @@ export default class PostProcessing {
       this.camera.instance,
       {
         focus: 1.0,
-        aperture: 0.025,
+        aperture: 0.01,
         maxblur: 0.01,
         width: this.sizes.width * this.sizes.pixelRatio,
         height: this.sizes.height * this.sizes.pixelRatio,
