@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
+
+/**
+ * Event bus.
+ */
 export default class EventEmitter {
-  /**
-   * Constructor
-   */
   constructor() {
     this.callbacks = {};
     this.callbacks.base = {};

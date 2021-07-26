@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-console */
 import {
   Color,
@@ -14,15 +15,13 @@ import { Pass, FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass';
 import { BokehShader } from 'three/examples/jsm/shaders/BokehShader';
 
 /**
- * Depth-of-field post-process with bokeh shader
+ * Depth-of-field post-process with bokeh shader.
+ *
+ * @param {THREE.scene}  scene
+ * @param {THREE.Camera} camera
+ * @param {Object}       params
  */
 export default class BokehPass extends Pass {
-  /**
-   * Constructor.
-   * @param {THREE.scene}  scene
-   * @param {THREE.Camera} camera
-   * @param {Object}       params
-   */
   constructor(scene, camera, params) {
     super();
 
@@ -83,9 +82,10 @@ export default class BokehPass extends Pass {
 
   /**
    * Render.
-   * @param {*} renderer
-   * @param {*} writeBuffer
-   * @param {*} readBuffer
+   *
+   * @param {THREE.WebGLRenderer} renderer
+   * @param {THREE.WebGLRenderTarget} writeBuffer
+   * @param {THREE.WebGLRenderTarget} readBuffer
    */
   render(_renderer, writeBuffer, readBuffer) {
     // Render depth into texture
@@ -94,10 +94,13 @@ export default class BokehPass extends Pass {
     // Only override mesh
     this.scene.traverse((child) => {
       if (child instanceof Mesh) {
-        // eslint-disable-next-line no-param-reassign
         child.userData.originalMaterial = child.material;
-        // eslint-disable-next-line no-param-reassign
-        child.material = this.materialDepth;
+
+        if (child.userData.depthMaterial) {
+          child.material = child.userData.depthMaterial;
+        } else {
+          child.material = this.materialDepth;
+        }
       }
     });
 
@@ -128,7 +131,14 @@ export default class BokehPass extends Pass {
       this.fsQuad.render(renderer);
     }
 
-    this.scene.overrideMaterial = null;
+    // this.scene.overrideMaterial = null;
+    // Set the material back to original
+    this.scene.traverse((child) => {
+      if (child instanceof Mesh) {
+        child.material = child.userData.originalMaterial;
+      }
+    });
+
     renderer.setClearColor(this.oldClearColor);
     renderer.setClearAlpha(oldClearAlpha);
     renderer.autoClear = oldAutoClear;

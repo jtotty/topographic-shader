@@ -6,22 +6,16 @@ uniform float uElevationGeneralFrequency;
 uniform float uElevationDetails;
 uniform float uElevationDetailsFrequency;
 
-#pragma glslify: getPerlinNoise3d = require('../partials/getPerlinNoise3d.glsl')
+#pragma glslify: getPerlinNoise2d = require('../partials/getPerlinNoise2d.glsl')
 
 float getElevation(vec2 position) {
   float elevation = 0.0;
 
   // General elevation
-  elevation += getPerlinNoise3d(vec3(
-    position * 0.3,
-    0.0
-  )) * 0.5;
+  elevation += getPerlinNoise2d(position * 0.3) * 0.5;
 
   // Hills
-  elevation += getPerlinNoise3d(vec3(
-    (position + 120.0) * 1.0,
-    0.0
-  )) * 0.2;
+  elevation += getPerlinNoise2d(position + 123.0) * 0.2;
 
   elevation *= uElevation;
 

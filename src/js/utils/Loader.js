@@ -2,6 +2,9 @@
 import * as THREE from 'three';
 import EventEmitter from './EventEmitter';
 
+/**
+ * Create our 3D asset loaders.
+ */
 export default class Loader extends EventEmitter {
   constructor() {
     super();

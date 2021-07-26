@@ -1,10 +1,15 @@
 import PlaneMaterial from '../materials/PlaneMaterial';
 
+/**
+ * Assign our materials.
+ *
+ * @param {Object} params
+ */
 export default class Materials {
-  constructor(_option) {
-    this.debug = _option.debug;
-    this.config = _option.config;
-    this.resources = _option.resources;
+  constructor(params) {
+    this.debug = params.debug;
+    this.config = params.config;
+    this.resources = params.resources;
     this.items = {};
 
     this.setMaterials();

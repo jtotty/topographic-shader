@@ -1,9 +1,9 @@
 import EventEmitter from './EventEmitter';
 
+/**
+ * Our animation ticker.
+ */
 export default class Time extends EventEmitter {
-  /**
-   * Constructor.
-   */
   constructor() {
     super();
 
@@ -29,7 +29,7 @@ export default class Time extends EventEmitter {
     this.current = current;
 
     // Cap delta at 60 - consistent animation speed across devices
-    // eg High refresh rate (120+) screens will run faster
+    // eg High refresh rate 120hz+ screens will run faster than a 60hz.
     if (this.delta > 60) this.delta = 60;
 
     this.trigger('tick');

@@ -4,20 +4,18 @@ import Plane from './world/Plane';
 
 /**
  * Our 3D world.
+ *
+ * @param {Object} params
  */
 export default class World {
-  /**
-   * Constructor.
-   * @param {Object} _option
-   */
-  constructor(_option) {
-    this.time = _option.time;
-    this.sizes = _option.sizes;
-    this.debug = _option.debug;
-    this.renderer = _option.renderer;
-    this.config = _option.config;
-    this.camera = _option.camera;
-    this.resources = _option.resources;
+  constructor(params) {
+    this.time = params.time;
+    this.sizes = params.sizes;
+    this.debug = params.debug;
+    this.renderer = params.renderer;
+    this.config = params.config;
+    this.camera = params.camera;
+    this.resources = params.resources;
 
     // Set up
     this.container = new THREE.Object3D();
@@ -33,7 +31,6 @@ export default class World {
   start() {
     // Wait for resources to finish loading
     // this.resources.on('ready', () => {});
-
     this.setMaterials();
     this.setPlane();
   }
@@ -54,7 +51,7 @@ export default class World {
    */
   setPlane() {
     this.plane = new Plane({
-      material: this.material,
+      material: this.material.items.shader.plane,
       time: this.time,
       debug: this.debugFolder,
     });

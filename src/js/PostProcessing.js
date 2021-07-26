@@ -55,14 +55,6 @@ export default class PostProcessing {
       },
     );
 
-    // Pass our terrain depth material to the bokeh pass
-    this.bokehPass.materialDepth = window.topo.terrain.depthMaterial;
-
-    // Animate our bokeh shader
-    this.time.on('tick', () => {
-      this.bokehPass.materialDepth.uniforms.uTime.value = this.time.elapsed;
-    });
-
     if (this.debug) this.setupDebug();
 
     this.effectComposer.addPass(this.bokehPass);

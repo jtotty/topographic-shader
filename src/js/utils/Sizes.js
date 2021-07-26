@@ -1,9 +1,9 @@
 import EventEmitter from './EventEmitter';
 
+/**
+ * Set and get the sizes of our viewport.
+ */
 export default class Sizes extends EventEmitter {
-  /**
-   * Constructor.
-   */
   constructor() {
     super();
 

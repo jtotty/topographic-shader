@@ -66,7 +66,7 @@ export default class Application {
     this.scene = new THREE.Scene();
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
-      antialias: true,
+      antialias: false,
     });
     this.renderer.setClearColor(this.config.clearColor);
 

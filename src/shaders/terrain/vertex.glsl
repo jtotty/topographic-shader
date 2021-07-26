@@ -1,8 +1,9 @@
 uniform float uTime;
 
 varying float vElevation;
+varying vec2 vUv;
 
-#pragma glslify: getElevation = require('../partials/getElevation.glsl')
+#pragma glslify: getElevation = require('../partials/getElevation.glsl')depthMaterial
 
 void main() {
   vec4 modelPosition = modelMatrix * vec4(position, 1.0);
@@ -18,4 +19,5 @@ void main() {
 	gl_Position = projectionPosition;
 
   vElevation = elevation;
+  vUv = uv;
 }

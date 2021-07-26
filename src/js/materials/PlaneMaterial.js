@@ -192,8 +192,5 @@ export default function PlaneMaterial(debug, config) {
 
   if (debug) setupDebug(debug, terrain.uniforms, terrain);
 
-  // Assing to our global object
-  window.topo.terrain = terrain;
-
-  return terrain.material;
+  return terrain;
 }
