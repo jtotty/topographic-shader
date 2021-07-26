@@ -129,6 +129,7 @@ export default class Application {
    */
   setPostProcessing() {
     this.postProcessing = new PostProcessing({
+      time: this.time,
       sizes: this.sizes,
       renderer: this.renderer,
       camera: this.camera,

@@ -9,14 +9,15 @@ import BokehPass from './passes/BokehPass';
 export default class PostProcessing {
   /**
    * Constructor.
-   * @param {Object} _options
+   * @param {Object} params
    */
-  constructor(_option) {
-    this.sizes = _option.sizes;
-    this.renderer = _option.renderer;
-    this.camera = _option.camera;
-    this.scene = _option.scene;
-    this.debug = _option.debug;
+  constructor(params) {
+    this.time = params.time;
+    this.sizes = params.sizes;
+    this.renderer = params.renderer;
+    this.camera = params.camera;
+    this.scene = params.scene;
+    this.debug = params.debug;
 
     this.init();
     this.initBokeh();
@@ -47,8 +48,8 @@ export default class PostProcessing {
       this.camera.instance,
       {
         focus: 1.0,
-        aperture: 0.0013,
-        maxblur: 0.004,
+        aperture: 0.025,
+        maxblur: 0.01,
         width: this.sizes.width * this.sizes.pixelRatio,
         height: this.sizes.height * this.sizes.pixelRatio,
       },
@@ -56,6 +57,11 @@ export default class PostProcessing {
 
     // Pass our terrain depth material to the bokeh pass
     this.bokehPass.materialDepth = window.topo.terrain.depthMaterial;
+
+    // Animate our bokeh shader
+    this.time.on('tick', () => {
+      this.bokehPass.materialDepth.uniforms.uTime.value = this.time.elapsed;
+    });
 
     if (this.debug) this.setupDebug();
 

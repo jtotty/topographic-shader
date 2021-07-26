@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import {
   Color,
+  Mesh,
   MeshDepthMaterial,
   NearestFilter,
   NoBlending,
@@ -88,7 +89,17 @@ export default class BokehPass extends Pass {
    */
   render(_renderer, writeBuffer, readBuffer) {
     // Render depth into texture
-    this.scene.overrideMaterial = this.materialDepth;
+    // this.scene.overrideMaterial = this.materialDepth;
+
+    // Only override mesh
+    this.scene.traverse((child) => {
+      if (child instanceof Mesh) {
+        // eslint-disable-next-line no-param-reassign
+        child.userData.originalMaterial = child.material;
+        // eslint-disable-next-line no-param-reassign
+        child.material = this.materialDepth;
+      }
+    });
 
     const renderer = _renderer;
 

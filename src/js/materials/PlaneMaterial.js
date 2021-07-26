@@ -164,6 +164,7 @@ export default function PlaneMaterial(debug, config) {
     uTextureFrequency: { value: 10 },
   };
 
+  // Material for our topographic effect
   terrain.material = new THREE.ShaderMaterial({
     uniforms: terrain.uniforms,
     vertexShader: terrainVertexShader,
@@ -173,18 +174,19 @@ export default function PlaneMaterial(debug, config) {
     side: THREE.DoubleSide,
   });
 
+  // Pass depth information
   terrain.depthUniforms = THREE.UniformsUtils.merge([
     THREE.UniformsLib.common,
     THREE.UniformsLib.displacementmap,
     terrain.uniforms,
   ]);
 
+  // Material for the post-processing bokeh shader
   terrain.depthMaterial = new THREE.ShaderMaterial({
     uniforms: terrain.depthUniforms,
     vertexShader: terrainDepthVertexShader,
     fragmentShader: terrainDepthFragmentShader,
   });
-
   terrain.depthMaterial.depthPacking = THREE.RGBADepthPacking;
   terrain.depthMaterial.blending = THREE.NoBlending;
 

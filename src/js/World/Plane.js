@@ -34,8 +34,8 @@ export default class Plane {
     this.container.updateMatrix();
 
     // Animate our plane shader
-    // this.time.on('tick', () => {
-    //   this.material.items.shader.plane.uniforms.uTime.value = this.time.elapsed;
-    // });
+    this.time.on('tick', () => {
+      this.material.items.shader.plane.uniforms.uTime.value = this.time.elapsed;
+    });
   }
 }
