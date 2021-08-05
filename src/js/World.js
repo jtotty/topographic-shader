@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-// import Materials from './world/Materials';
-// import Plane from './world/Plane';
+import Materials from './blahblah/Materials';
+import Plane from './blahblah/Plane';
 
 /**
  * Our 3D world.
@@ -39,24 +39,24 @@ export default class World {
    * Add our materials.
    */
   setMaterials() {
-    // this.material = new Materials({
-    //   resources: this.resources,
-    //   debug: this.debug,
-    //   config: this.config,
-    // });
+    this.material = new Materials({
+      resources: this.resources,
+      debug: this.debug,
+      config: this.config,
+    });
   }
 
   /**
    * Add our Plane to the world.
    */
   setPlane() {
-    // this.plane = new Plane({
-    //   material: this.material.items.shader.plane,
-    //   time: this.time,
-    //   debug: this.debugFolder,
-    //   position: { x: 0, y: 0, z: 0 },
-    // });
+    this.plane = new Plane({
+      material: this.material.items.shader.plane,
+      time: this.time,
+      debug: this.debugFolder,
+      position: { x: 0, y: 0, z: 0 },
+    });
 
-    // this.group.add(this.plane.mesh);
+    this.group.add(this.plane.mesh);
   }
 }
