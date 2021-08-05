@@ -18,7 +18,7 @@ const setupDebug = (debug, uniforms, terrain) => {
   shaderOptions.addInput(uniforms.uElevation, 'value', {
     label: 'elevation',
     min: 0,
-    max: 10,
+    max: 30,
     step: 0.001,
   });
 
@@ -190,19 +190,6 @@ export default function PlaneMaterial(debug, config) {
       );
     }
 
-    // terrain.texture.context.fillStyle = 'red';
-    // terrain.texture.context.fillRect(
-    //   0, Math.round(terrain.texture.height * 0), terrain.texture.width, 4,
-    // );
-    // terrain.texture.context.fillStyle = 'blue';
-    // terrain.texture.context.fillRect(
-    //   0, Math.round(terrain.texture.height * 0.4), terrain.texture.width, 4,
-    // );
-    // terrain.texture.context.fillStyle = 'green';
-    // terrain.texture.context.fillRect(
-    //   0, Math.round(terrain.texture.height * 0.9), terrain.texture.width, 4,
-    // );
-
     terrain.texture.instance.needsUpdate = true;
   };
 
@@ -217,10 +204,10 @@ export default function PlaneMaterial(debug, config) {
     uHslHue: { value: 1 },
     uHslHueOffset: { value: 0 },
     uHslHueFrequency: { value: 10 },
-    uHslTimeFrequency: { value: 0.00005 },
     uHslLightness: { value: 0.75 },
     uHslLightnessVariation: { value: 0.25 },
     uHslLightnessFrequency: { value: 20 },
+    uHslTimeFrequency: { value: 0.00005 },
   };
 
   // Material for our topographic effect
@@ -229,8 +216,7 @@ export default function PlaneMaterial(debug, config) {
     vertexShader: terrainVertexShader,
     fragmentShader: terrainFragmentShader,
     transparent: true,
-    // blending: THREE.AdditiveBlending,
-    side: THREE.DoubleSide,
+    blending: THREE.NormalBlending,
   });
 
   // Pass depth information

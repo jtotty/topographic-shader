@@ -7,15 +7,15 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 export default class Camera {
   /**
    * Constructor.
-   * @param {Object} _options
+   * @param {Object} params
    */
-  constructor(_option) {
+  constructor(params) {
     // Options
-    this.time = _option.time;
-    this.sizes = _option.sizes;
-    this.debug = _option.debug;
-    this.renderer = _option.renderer;
-    this.config = _option.config;
+    this.time = params.time;
+    this.sizes = params.sizes;
+    this.debug = params.debug;
+    this.renderer = params.renderer;
+    this.config = params.config;
 
     // Set up
     this.container = new THREE.Object3D();

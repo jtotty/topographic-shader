@@ -41,8 +41,9 @@ void main() {
 
 	vec4 mPosition = modelMatrix * position;
 
-	float elevation = getElevation(mPosition.xz + vec2(uTime * 0.0003, uTime * 0.0));
-  	mPosition.y += elevation;
+	// float elevation = getElevation(mPosition.x + vec2(uTime * 0.0003, uTime * 0.0));
+	float elevation = getElevation(mPosition.xyz + vec3(uTime * 0.0003, uTime * 0.0003, uTime * 0.0003));
+  	mPosition.xyz *= elevation * 0.01;
 
 	vec4 mvPosition = viewMatrix * mPosition;
 

@@ -25,7 +25,8 @@ export default class Plane {
    * Create our plane.
    */
   setPlane() {
-    const geometry = new THREE.PlaneGeometry(1, 1, 1000, 1000);
+    // const geometry = new THREE.PlaneGeometry(1, 1, 1000, 1000);
+    const geometry = new THREE.SphereGeometry(2, 1024, 1024);
     geometry.rotateX(-Math.PI * 0.5);
 
     const mesh = new THREE.Mesh(geometry, this.terrain.material);

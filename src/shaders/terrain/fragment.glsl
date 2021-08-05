@@ -1,19 +1,19 @@
 uniform sampler2D uTexture;
 uniform float uTime;
-uniform float uTextureFrequency;
-uniform float uHslHue;
-uniform float uHslHueOffset;
-uniform float uHslHueFrequency;
-uniform float uHslLightness;
-uniform float uHslLightnessVariation;
-uniform float uHslLightnessFrequency;
-uniform float uHslTimeFrequency;
+uniform float uTextureFrequency; // 10
+uniform float uHslHue; // 1
+uniform float uHslHueOffset; // 0
+uniform float uHslHueFrequency; // 10
+uniform float uHslLightness; // 0.75
+uniform float uHslLightnessVariation; // 0.25
+uniform float uHslLightnessFrequency; // 20
+uniform float uHslTimeFrequency; // 0.0005
 
 varying float vElevation;
 varying vec2 vUv;
 
 #pragma glslify: getPerlinNoise2d = require('../partials/getPerlinNoise2d.glsl')
-#pragma glslify: getElevation = require('../partials/getElevation.glsl')
+#pragma glslify: getFBM2d = require('../partials/getFBM2d.glsl')
 #pragma glslify: hsl2rgb = require('../partials/hsl2rgb.glsl')
 
 vec3 getRainbowColor() {
@@ -21,7 +21,10 @@ vec3 getRainbowColor() {
   uv.y += + uTime * uHslTimeFrequency;
 
   float hue = uHslHueOffset + getPerlinNoise2d(uv * uHslHueFrequency) * uHslHue;
-  float lightness = uHslLightness + getPerlinNoise2d(uv * uHslLightnessFrequency + 1234.5) * uHslLightnessVariation;
+  float lightness = uHslLightness 
+    + getFBM2d(uv * uHslLightnessFrequency + 1234.5) 
+    * uHslLightnessVariation;
+
   vec3 hslColor = vec3(hue, 1.0, lightness);
 
   return hsl2rgb(hslColor);
@@ -33,10 +36,14 @@ void main() {
   vec3 rainbowColor = getRainbowColor();
   vec4 textureColor = texture2D(uTexture, vec2(0.0, vElevation * uTextureFrequency));
 
-  // float alpha = mod(vElevation * 10.0, 1.0);
-  // alpha = step(0.95, alpha);
-
   vec3 color = mix(uColor, rainbowColor, textureColor.r);
 
-  gl_FragColor = vec4(color, textureColor.a);
+  // float sideAlpha = 1.0 - max(
+  //   smoothstep(0.4, 0.5, abs(vUv.x - 0.5)),
+  //   smoothstep(0.4, 0.5, abs(vUv.y - 0.5))
+  // );
+  
+  float sideAlpha = 1.0;
+
+  gl_FragColor = vec4(color, textureColor.a * sideAlpha);
 }

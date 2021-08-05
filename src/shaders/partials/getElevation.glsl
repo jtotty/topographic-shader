@@ -1,3 +1,4 @@
+uniform float uTime;
 uniform float uElevation;
 uniform float uElevationValleyFrequency;
 uniform float uElevationValley;
@@ -6,18 +7,21 @@ uniform float uElevationGeneralFrequency;
 uniform float uElevationDetails;
 uniform float uElevationDetailsFrequency;
 
-#pragma glslify: getPerlinNoise2d = require('../partials/getPerlinNoise2d.glsl')
+#pragma glslify: getPerlinNoise3d = require('../partials/getPerlinNoise3d.glsl')
+#pragma glslify: getFBM2d = require('../partials/getFBM2d.glsl')
 
-float getElevation(vec2 position) {
+float getElevation(vec3 position) {
   float elevation = 0.0;
 
   // General elevation
-  elevation += getPerlinNoise2d(position * 0.3) * 0.5;
+  elevation += getPerlinNoise3d(position * 0.3) * 0.5;
+  // elevation += getFBM2d(position * 0.3) * 0.5;
 
   // Hills
-  elevation += getPerlinNoise2d(position + 123.0) * 0.2;
+  elevation += getPerlinNoise3d(position + 123.0) * 0.2;
+  // elevation += getFBM2d(position + 123.0) * 0.2;
 
-  elevation *= uElevation;
+  elevation += uElevation;
 
   return elevation;
 }
