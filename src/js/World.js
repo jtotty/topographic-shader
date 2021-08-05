@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import Materials from './world/materials';
-import Plane from './world/plane';
+import Materials from './world/materials.js';
+import Plane from './world/plane.js';
 
 /**
  * Our 3D world.
