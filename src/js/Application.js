@@ -121,7 +121,7 @@ export default class Application {
       resources: this.resources,
     });
 
-    this.scene.add(this.world.container);
+    this.scene.add(this.world.group);
   }
 
   /**

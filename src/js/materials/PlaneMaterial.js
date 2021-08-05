@@ -216,7 +216,7 @@ export default function PlaneMaterial(debug, config) {
     vertexShader: terrainVertexShader,
     fragmentShader: terrainFragmentShader,
     transparent: true,
-    blending: THREE.NormalBlending,
+    blending: THREE.AdditiveBlending,
   });
 
   // Pass depth information

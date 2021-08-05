@@ -10,9 +10,7 @@ export default class Plane {
     this.terrain = params.material;
     this.time = params.time;
     this.debug = params.debug;
-
-    this.container = new THREE.Object3D();
-    this.container.matrixAutoUpdate = false;
+    this.position = params.position;
 
     if (this.debug) {
       this.debugFolder = this.debug.addFolder({ title: 'plane', expanded: true });
@@ -29,14 +27,17 @@ export default class Plane {
     const geometry = new THREE.SphereGeometry(2, 1024, 1024);
     geometry.rotateX(-Math.PI * 0.5);
 
-    const mesh = new THREE.Mesh(geometry, this.terrain.material);
-    mesh.scale.set(10, 10, 10);
+    this.mesh = new THREE.Mesh(geometry, this.terrain.material);
+    this.mesh.scale.set(10, 10, 10);
+
+    const { x, y, z } = this.position;
+    this.mesh.position.set(x, y, z);
 
     // Assing our depth material for bokeh to userData
-    mesh.userData.depthMaterial = this.terrain.depthMaterial;
+    this.mesh.userData.depthMaterial = this.terrain.depthMaterial;
 
-    this.container.add(mesh);
-    this.container.updateMatrix();
+    // this.container.add(mesh);
+    // this.container.updateMatrix();
 
     // Animate our plane shader
     this.time.on('tick', () => {

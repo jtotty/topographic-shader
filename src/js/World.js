@@ -18,8 +18,8 @@ export default class World {
     this.resources = params.resources;
 
     // Set up
-    this.container = new THREE.Object3D();
-    this.container.matrixAutoUpdate = false;
+    this.group = new THREE.Group();
+    // this.container.matrixAutoUpdate = false;
 
     // Lets go!
     this.start();
@@ -54,8 +54,9 @@ export default class World {
       material: this.material.items.shader.plane,
       time: this.time,
       debug: this.debugFolder,
+      position: { x: 0, y: 0, z: 0 },
     });
 
-    this.container.add(this.plane.container);
+    this.group.add(this.plane.mesh);
   }
 }
