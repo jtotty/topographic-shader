@@ -117,18 +117,17 @@ const setupDebug = (debug, uniforms, terrain) => {
  * Our plane material.
  *
  * @param {Object} debug
- * @param {Object} config
  * @returns {THREE.ShaderMaterial} material
  */
-export default function PlaneMaterial(debug, config) {
+export default function PlaneMaterial(debug) {
   const terrain = {
     texture: {
       width: 32,
       height: 128,
       linesCount: 5,
-      thickLineHeight: 0.04,
+      thickLineHeight: 0.05,
       thinLineHeight: 0.01,
-      thinLineAlhpa: 0.5,
+      thinLineAlhpa: 0.35,
     },
   };
 
@@ -198,16 +197,16 @@ export default function PlaneMaterial(debug, config) {
   // Uniforms
   terrain.uniforms = {
     uTime: { value: 0 },
-    uElevation: { value: config.shader.elevation },
+    uElevation: { value: 30 },
     uTexture: { value: terrain.texture.instance },
-    uTextureFrequency: { value: 10 },
+    uTextureFrequency: { value: 8.15 },
     uHslHue: { value: 1 },
-    uHslHueOffset: { value: 0 },
-    uHslHueFrequency: { value: 10 },
-    uHslLightness: { value: 0.75 },
-    uHslLightnessVariation: { value: 0.25 },
-    uHslLightnessFrequency: { value: 20 },
-    uHslTimeFrequency: { value: 0.00005 },
+    uHslHueOffset: { value: 0.4 },
+    uHslHueFrequency: { value: 15.75 },
+    uHslLightness: { value: 0.5 },
+    uHslLightnessVariation: { value: 0.185 },
+    uHslLightnessFrequency: { value: 24 },
+    uHslTimeFrequency: { value: 0.00004 },
   };
 
   // Material for our topographic effect

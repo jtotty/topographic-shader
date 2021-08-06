@@ -44,9 +44,6 @@ export default class Application {
     this.config = {
       debug: window.location.hash === '#debug',
       clearColor: '#08001f',
-      shader: {
-        elevation: 2,
-      },
     };
   }
 

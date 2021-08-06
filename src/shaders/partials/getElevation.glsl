@@ -21,7 +21,7 @@ float getElevation(vec3 position) {
   elevation += getPerlinNoise3d(position + 123.0) * 0.2;
   // elevation += getFBM2d(position + 123.0) * 0.2;
 
-  elevation += uElevation;
+  elevation *= uElevation * 0.01;
 
   return elevation;
 }
