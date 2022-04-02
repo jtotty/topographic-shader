@@ -10,15 +10,13 @@ import Camera from './Camera'
 import World from './World'
 import PostProcessing from './PostProcessing'
 
+import animate from './animation/animate'
+
 /**
  * Our Three JS Application.
- *
+ * @param {Object} _options
  */
 export default class Application {
-  /**
-   * Constructor.
-   * @param {Object} _options
-   */
   constructor(_options) {
     this.canvas = _options.canvas
 
@@ -36,6 +34,7 @@ export default class Application {
     this.setWorld()
     this.setPostProcessing()
     this.statsMonitoring()
+    this.startAnimation()
   }
 
   /**
@@ -165,6 +164,13 @@ export default class Application {
       this.stats.begin()
       this.stats.end()
     })
+  }
+
+  /**
+   * Animate the thing.
+   */
+  startAnimation() {
+    animate(this.world, this.camera)
   }
 
   /**

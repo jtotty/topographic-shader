@@ -10,6 +10,7 @@ export default class Materials {
     this.debug = params.debug
     this.config = params.config
     this.resources = params.resources
+    this.camera = params.camera
     this.items = {}
 
     this.setMaterials()
@@ -20,7 +21,7 @@ export default class Materials {
    */
   setMaterials() {
     this.items.shader = {
-      plane: PlaneMaterial(this.debug),
+      plane: PlaneMaterial(this.camera, this.debug),
     }
   }
 }

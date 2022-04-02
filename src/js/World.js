@@ -19,7 +19,6 @@ export default class World {
 
     // Set up
     this.group = new THREE.Group()
-    // this.container.matrixAutoUpdate = false;
 
     // Lets go!
     this.start()
@@ -41,6 +40,7 @@ export default class World {
   setMaterials() {
     this.material = new Materials({
       resources: this.resources,
+      camera: this.camera,
       debug: this.debug,
       config: this.config,
     })

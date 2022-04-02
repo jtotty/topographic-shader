@@ -28,7 +28,7 @@ export default class PostProcessing {
    * Setup our render target and instance of Effect Composer.
    */
   init() {
-    this.renderTarget = new THREE.WebGLMultisampleRenderTarget(800, 600, {
+    this.renderTarget = new THREE.WebGLRenderTarget(800, 600, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
       format: THREE.RGBAFormat,

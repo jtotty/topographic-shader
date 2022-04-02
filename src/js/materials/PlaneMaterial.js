@@ -115,11 +115,11 @@ const setupDebug = (debug, uniforms, terrain) => {
 
 /**
  * Our plane material.
- *
- * @param {Object} debug
+ * @param {object} camera
+ * @param {object} debug
  * @returns {THREE.ShaderMaterial} material
  */
-export default function PlaneMaterial(debug) {
+export default function PlaneMaterial(camera, debug) {
   const terrain = {
     texture: {
       width: 32,

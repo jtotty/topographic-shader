@@ -3,12 +3,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 /**
  * Our Camera.
+ * @param {Object} params
  */
 export default class Camera {
-  /**
-   * Constructor.
-   * @param {Object} params
-   */
   constructor(params) {
     // Options
     this.time = params.time
@@ -21,15 +18,15 @@ export default class Camera {
     this.container = new THREE.Object3D()
     this.container.matrixAutoUpdate = false
 
-    this.setInstance()
+    this.setCamera()
     this.setOrbitControls()
   }
 
-  setInstance() {
+  setCamera() {
     const { width, height } = this.sizes.viewport
 
     this.instance = new THREE.PerspectiveCamera(75, width / height, 0.1, 100)
-    this.instance.position.set(0.25, 0.4, 2)
+    this.instance.position.set(0, 0, 1.1)
     this.instance.lookAt(new THREE.Vector3())
     this.container.add(this.instance)
 
