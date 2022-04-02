@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { Pane } from 'tweakpane'
 
+import Stats from 'stats.js'
 import Time from './utils/Time'
 import Sizes from './utils/Sizes'
 import Resources from './Resources'
@@ -34,6 +35,7 @@ export default class Application {
     this.setCamera()
     this.setWorld()
     this.setPostProcessing()
+    this.statsMonitoring()
   }
 
   /**
@@ -148,6 +150,21 @@ export default class Application {
     this.camera.orbitControls.dispose()
     this.renderer.dispose()
     this.debug.destroy()
+  }
+
+  /**
+   * FPS Monitoring.
+   * This might be a bit heavy.
+   */
+  statsMonitoring() {
+    this.stats = new Stats()
+    this.stats.showPanel(0)
+    document.body.appendChild(this.stats.dom)
+
+    this.time.on('tick', () => {
+      this.stats.begin()
+      this.stats.end()
+    })
   }
 
   /**

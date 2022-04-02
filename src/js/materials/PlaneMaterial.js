@@ -138,6 +138,7 @@ export default function PlaneMaterial(debug) {
   canvas.style.top = 0
   canvas.style.left = 0
   canvas.style.zIndex = 1
+  canvas.style.opacity = 0
 
   terrain.texture.canvas = canvas
   document.body.append(terrain.texture.canvas)
