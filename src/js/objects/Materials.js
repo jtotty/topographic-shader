@@ -1,4 +1,4 @@
-import PlaneMaterial from '../materials/PlaneMaterial';
+import PlaneMaterial from '../materials/PlaneMaterial'
 
 /**
  * Assign our materials.
@@ -7,12 +7,12 @@ import PlaneMaterial from '../materials/PlaneMaterial';
  */
 export default class Materials {
   constructor(params) {
-    this.debug = params.debug;
-    this.config = params.config;
-    this.resources = params.resources;
-    this.items = {};
+    this.debug = params.debug
+    this.config = params.config
+    this.resources = params.resources
+    this.items = {}
 
-    this.setMaterials();
+    this.setMaterials()
   }
 
   /**
@@ -21,6 +21,6 @@ export default class Materials {
   setMaterials() {
     this.items.shader = {
       plane: PlaneMaterial(this.debug),
-    };
+    }
   }
 }
