@@ -1,6 +1,6 @@
-import * as THREE from 'three';
-import Materials from './blahblah/Materials';
-import Plane from './blahblah/Plane';
+import * as THREE from 'three'
+import Materials from './objects/Materials'
+import Plane from './objects/Plane'
 
 /**
  * Our 3D world.
@@ -9,20 +9,19 @@ import Plane from './blahblah/Plane';
  */
 export default class World {
   constructor(params) {
-    this.time = params.time;
-    this.sizes = params.sizes;
-    this.debug = params.debug;
-    this.renderer = params.renderer;
-    this.config = params.config;
-    this.camera = params.camera;
-    this.resources = params.resources;
+    this.time = params.time
+    this.sizes = params.sizes
+    this.debug = params.debug
+    this.renderer = params.renderer
+    this.config = params.config
+    this.camera = params.camera
+    this.resources = params.resources
 
     // Set up
-    this.group = new THREE.Group();
-    // this.container.matrixAutoUpdate = false;
+    this.group = new THREE.Group()
 
     // Lets go!
-    this.start();
+    this.start()
   }
 
   /**
@@ -31,8 +30,8 @@ export default class World {
   start() {
     // Wait for resources to finish loading
     // this.resources.on('ready', () => {});
-    this.setMaterials();
-    this.setPlane();
+    this.setMaterials()
+    this.setPlane()
   }
 
   /**
@@ -41,9 +40,10 @@ export default class World {
   setMaterials() {
     this.material = new Materials({
       resources: this.resources,
+      camera: this.camera,
       debug: this.debug,
       config: this.config,
-    });
+    })
   }
 
   /**
@@ -55,8 +55,8 @@ export default class World {
       time: this.time,
       debug: this.debugFolder,
       position: { x: 0, y: 0, z: 0 },
-    });
+    })
 
-    this.group.add(this.plane.mesh);
+    this.group.add(this.plane.mesh)
   }
 }

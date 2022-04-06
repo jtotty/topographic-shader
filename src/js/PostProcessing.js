@@ -1,7 +1,7 @@
-import * as THREE from 'three';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import BokehPass from './passes/BokehPass';
+import * as THREE from 'three'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import BokehPass from './passes/BokehPass'
 
 /**
  * Our post processing. Let the magic happen! 🌟
@@ -12,31 +12,31 @@ export default class PostProcessing {
    * @param {Object} params
    */
   constructor(params) {
-    this.time = params.time;
-    this.sizes = params.sizes;
-    this.renderer = params.renderer;
-    this.camera = params.camera;
-    this.scene = params.scene;
-    this.debug = params.debug;
+    this.time = params.time
+    this.sizes = params.sizes
+    this.renderer = params.renderer
+    this.camera = params.camera
+    this.scene = params.scene
+    this.debug = params.debug
 
-    this.init();
-    this.initBokeh();
-    this.resize();
+    this.init()
+    this.initBokeh()
+    this.resize()
   }
 
   /**
    * Setup our render target and instance of Effect Composer.
    */
   init() {
-    this.renderTarget = new THREE.WebGLMultisampleRenderTarget(800, 600, {
+    this.renderTarget = new THREE.WebGLRenderTarget(800, 600, {
       minFilter: THREE.LinearFilter,
       magFilter: THREE.LinearFilter,
       format: THREE.RGBAFormat,
       encoding: THREE.sRGBEncoding,
-    });
+    })
 
-    this.effectComposer = new EffectComposer(this.renderer);
-    this.effectComposer.addPass(new RenderPass(this.scene, this.camera.instance));
+    this.effectComposer = new EffectComposer(this.renderer)
+    this.effectComposer.addPass(new RenderPass(this.scene, this.camera.instance))
   }
 
   /**
@@ -47,46 +47,46 @@ export default class PostProcessing {
       this.scene,
       this.camera.instance,
       {
-        focus: 1.0,
+        focus: 1.4,
         aperture: 0.01,
-        maxblur: 0.01,
+        maxblur: 0.0045,
         width: this.sizes.width * this.sizes.pixelRatio,
         height: this.sizes.height * this.sizes.pixelRatio,
       },
-    );
+    )
 
-    if (this.debug) this.setupDebug();
+    if (this.debug) this.setupDebug()
 
-    this.effectComposer.addPass(this.bokehPass);
+    this.effectComposer.addPass(this.bokehPass)
 
     this.sizes.on('resize', () => {
-      this.resize();
-    });
+      this.resize()
+    })
   }
 
   /**
    * Resize the effect composer and set pixel ratio.
    */
   resize() {
-    const { width, height } = this.sizes.viewport;
+    const { width, height } = this.sizes.viewport
 
-    this.effectComposer.setSize(width, height);
-    this.effectComposer.setPixelRatio(this.sizes.pixelRatio);
+    this.effectComposer.setSize(width, height)
+    this.effectComposer.setPixelRatio(this.sizes.pixelRatio)
 
-    this.bokehPass.renderTargetDepth.width = width * this.sizes.pixelRatio;
-    this.bokehPass.renderTargetDepth.height = height * this.sizes.pixelRatio;
+    this.bokehPass.renderTargetDepth.width = width * this.sizes.pixelRatio
+    this.bokehPass.renderTargetDepth.height = height * this.sizes.pixelRatio
   }
 
   /**
    * Debug utils for our post processing.
    */
   setupDebug() {
-    this.debugFolder = this.debug.addFolder({ title: 'Post Processing (Bokeh)', expanded: true });
+    this.debugFolder = this.debug.addFolder({ title: 'Post Processing (Bokeh)', expanded: true })
 
     // Toggle
-    this.debugFolder.addInput(this.bokehPass, 'enabled');
+    this.debugFolder.addInput(this.bokehPass, 'enabled')
 
-    const { focus, aperture, maxblur } = this.bokehPass.materialBokeh.uniforms;
+    const { focus, aperture, maxblur } = this.bokehPass.materialBokeh.uniforms
 
     // Focus
     this.debugFolder.addInput(focus, 'value', {
@@ -94,7 +94,7 @@ export default class PostProcessing {
       min: 0,
       max: 10,
       step: 0.01,
-    });
+    })
 
     // Aperture
     this.debugFolder.addInput(aperture, 'value', {
@@ -102,7 +102,7 @@ export default class PostProcessing {
       min: 0.0002,
       max: 0.1,
       step: 0.0001,
-    });
+    })
 
     // Max Blur
     this.debugFolder.addInput(maxblur, 'value', {
@@ -110,6 +110,6 @@ export default class PostProcessing {
       min: 0,
       max: 0.02,
       step: 0.0001,
-    });
+    })
   }
 }

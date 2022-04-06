@@ -1,39 +1,40 @@
-import * as THREE from 'three';
-import { Pane } from 'tweakpane';
+import * as THREE from 'three'
+import { Pane } from 'tweakpane'
 
-import Time from './utils/Time';
-import Sizes from './utils/Sizes';
-import Resources from './Resources';
+import Stats from 'stats.js'
+import Time from './utils/Time'
+import Sizes from './utils/Sizes'
+import Resources from './Resources'
 
-import Camera from './Camera';
-import World from './World';
-import PostProcessing from './PostProcessing';
+import Camera from './Camera'
+import World from './World'
+import PostProcessing from './PostProcessing'
+
+import animate from './animation/animate'
 
 /**
  * Our Three JS Application.
- *
+ * @param {Object} _options
  */
 export default class Application {
-  /**
-   * Constructor.
-   * @param {Object} _options
-   */
   constructor(_options) {
-    this.canvas = _options.canvas;
+    this.canvas = _options.canvas
 
-    this.time = new Time();
-    this.sizes = new Sizes();
-    this.resources = new Resources();
+    this.time = new Time()
+    this.sizes = new Sizes()
+    this.resources = new Resources()
 
     // Instantiatite our global object container on the window
-    window.topo = {};
+    window.topo = {}
 
-    this.setConfig();
-    this.setDebug();
-    this.setRenderer();
-    this.setCamera();
-    this.setWorld();
-    this.setPostProcessing();
+    this.setConfig()
+    this.setDebug()
+    this.setRenderer()
+    this.setCamera()
+    this.setWorld()
+    this.setPostProcessing()
+    this.statsMonitoring()
+    this.startAnimation()
   }
 
   /**
@@ -44,10 +45,7 @@ export default class Application {
     this.config = {
       debug: window.location.hash === '#debug',
       clearColor: '#08001f',
-      shader: {
-        elevation: 2,
-      },
-    };
+    }
   }
 
   /**
@@ -55,7 +53,7 @@ export default class Application {
    */
   setDebug() {
     if (this.config.debug) {
-      this.debug = new Pane();
+      this.debug = new Pane()
     }
   }
 
@@ -63,29 +61,29 @@ export default class Application {
    * The WebGL renderer displays your beautifully crafted scenes using WebGL
    */
   setRenderer() {
-    this.scene = new THREE.Scene();
+    this.scene = new THREE.Scene()
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
       antialias: false,
-    });
-    this.renderer.setClearColor(this.config.clearColor);
+    })
+    this.renderer.setClearColor(this.config.clearColor)
 
     if (this.debug) {
-      this.debugFolder = this.debug.addFolder({ title: 'App', expanded: true });
+      this.debugFolder = this.debug.addFolder({ title: 'App', expanded: true })
 
       this.debugFolder.addInput(this.config, 'clearColor', {
         label: 'Clear Color',
         view: 'color',
       }).on('change', (event) => {
-        this.renderer.setClearColor(event.value);
-      });
+        this.renderer.setClearColor(event.value)
+      })
     }
 
-    Application.resize(this.renderer, this.sizes.viewport);
+    Application.resize(this.renderer, this.sizes.viewport)
 
     this.sizes.on('resize', () => {
-      Application.resize(this.renderer, this.sizes.viewport);
-    });
+      Application.resize(this.renderer, this.sizes.viewport)
+    })
   }
 
   /**
@@ -98,13 +96,13 @@ export default class Application {
       debug: this.debug,
       renderer: this.renderer,
       config: this.config,
-    });
+    })
 
-    this.scene.add(this.camera.container);
+    this.scene.add(this.camera.container)
 
-    // this.time.on('tick', () => {
-    //   this.renderer.render(this.scene, this.camera.instance);
-    // });
+    this.time.on('tick', () => {
+      this.renderer.render(this.scene, this.camera.instance)
+    })
   }
 
   /**
@@ -119,9 +117,9 @@ export default class Application {
       config: this.config,
       camera: this.camera,
       resources: this.resources,
-    });
+    })
 
-    this.scene.add(this.world.group);
+    this.scene.add(this.world.group)
   }
 
   /**
@@ -135,22 +133,44 @@ export default class Application {
       camera: this.camera,
       scene: this.scene,
       debug: this.debug,
-    });
+    })
 
     this.time.on('tick', () => {
-      this.postProcessing.effectComposer.render();
-    });
+      this.postProcessing.effectComposer.render()
+    })
   }
 
   /**
    * Desctructor
    */
   desctructor() {
-    this.time.off('tick');
-    this.sizes.off('resize');
-    this.camera.orbitControls.dispose();
-    this.renderer.dispose();
-    this.debug.destroy();
+    this.time.off('tick')
+    this.sizes.off('resize')
+    this.camera.orbitControls.dispose()
+    this.renderer.dispose()
+    this.debug.destroy()
+  }
+
+  /**
+   * FPS Monitoring.
+   * This might be a bit heavy.
+   */
+  statsMonitoring() {
+    this.stats = new Stats()
+    this.stats.showPanel(0)
+    document.body.appendChild(this.stats.dom)
+
+    this.time.on('tick', () => {
+      this.stats.begin()
+      this.stats.end()
+    })
+  }
+
+  /**
+   * Animate the thing.
+   */
+  startAnimation() {
+    animate(this.world, this.camera)
   }
 
   /**
@@ -159,7 +179,7 @@ export default class Application {
    * @param {Object}              viewport
    */
   static resize(renderer, { width, height, pixelRatio }) {
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(width, height)
+    renderer.setPixelRatio(pixelRatio)
   }
 }
