@@ -36,9 +36,6 @@ export default class Plane {
     // Assing our depth material for bokeh to userData
     this.mesh.userData.depthMaterial = this.terrain.depthMaterial
 
-    // this.container.add(mesh);
-    // this.container.updateMatrix();
-
     // Animate our plane shader
     this.time.on('tick', () => {
       this.terrain.uniforms.uTime.value = this.time.elapsed

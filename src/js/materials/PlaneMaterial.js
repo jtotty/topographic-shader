@@ -12,7 +12,7 @@ import terrainDepthFragmentShader from '../../shaders/terrainDepth/fragment.glsl
  * @param {Object} uniforms
  * @param {Object} terrain
  */
-const setupDebug = (debug, uniforms, terrain) => {
+const setupDebug = (debug, uniforms, terrain, camera) => {
   const shaderOptions = debug.addFolder({ title: 'Shader', expanded: true })
 
   shaderOptions.addInput(uniforms.uElevation, 'value', {
@@ -111,15 +111,23 @@ const setupDebug = (debug, uniforms, terrain) => {
     max: 50,
     step: 0.01,
   })
+
+  const cameraOptions = debug.addFolder({ title: 'Camera', expanded: true })
+
+  cameraOptions.addInput(camera.instance.position, 'z', {
+    label: 'zPos',
+    min: -5,
+    max: 5,
+    step: 0.1,
+  })
 }
 
 /**
  * Our plane material.
- * @param {object} camera
  * @param {object} debug
  * @returns {THREE.ShaderMaterial} material
  */
-export default function PlaneMaterial(camera, debug) {
+export default function PlaneMaterial(debug, camera) {
   const terrain = {
     texture: {
       width: 32,
@@ -235,7 +243,7 @@ export default function PlaneMaterial(camera, debug) {
   terrain.depthMaterial.depthPacking = THREE.RGBADepthPacking
   terrain.depthMaterial.blending = THREE.NoBlending
 
-  if (debug) setupDebug(debug, terrain.uniforms, terrain)
+  if (debug) setupDebug(debug, terrain.uniforms, terrain, camera)
 
   return terrain
 }

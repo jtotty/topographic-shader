@@ -2,7 +2,6 @@ import PlaneMaterial from '../materials/PlaneMaterial'
 
 /**
  * Assign our materials.
- *
  * @param {Object} params
  */
 export default class Materials {
@@ -21,7 +20,7 @@ export default class Materials {
    */
   setMaterials() {
     this.items.shader = {
-      plane: PlaneMaterial(this.camera, this.debug),
+      plane: PlaneMaterial(this.debug, this.camera),
     }
   }
 }
