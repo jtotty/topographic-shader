@@ -7,8 +7,9 @@ import { gsap } from 'gsap'
  */
 export default function animate(world, camera) {
   const glsl = world.material.items.shader.plane
-  const timeline = gsap.timeline()
   const perspectiveCamera = camera.instance
+
+  const timeline = gsap.timeline({ repeat: -1 })
 
   timeline.to(glsl.uniforms.uElevation, {
     duration: 6,
@@ -58,5 +59,26 @@ export default function animate(world, camera) {
     delay: 0.5,
     value: 0.01,
     ease: 'power1.inOut',
+  })
+
+  timeline.to(glsl.uniforms.uTextureFrequency, {
+    duration: 6,
+    delay: 0.5,
+    value: 8.15,
+    ease: 'power1.inOut',
+  })
+
+  timeline.to(cameraRotation, {
+    duration: 6,
+    delay: 0.5,
+    tween: 0,
+    ease: 'power1.inOut',
+    onUpdate() {
+      perspectiveCamera.position.x = Math.sin(cameraRotation.tween)
+      perspectiveCamera.position.z = 0.1 + Math.cos(cameraRotation.tween)
+    },
+    onComplete() {
+      cameraRotation.tween = 0
+    },
   })
 }
