@@ -33,7 +33,7 @@ export default class Application {
     this.setCamera()
     this.setWorld()
     this.setPostProcessing()
-    this.statsMonitoring()
+    // this.statsMonitoring()
     this.startAnimation()
   }
 
@@ -156,10 +156,6 @@ export default class Application {
    * This might be a bit heavy.
    */
   statsMonitoring() {
-    if (process.env.PRODUCTION) {
-      return
-    }
-
     this.stats = new Stats()
     this.stats.showPanel(0)
     document.body.appendChild(this.stats.dom)
