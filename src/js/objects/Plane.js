@@ -23,7 +23,6 @@ export default class Plane {
    * Create our plane.
    */
   setPlane() {
-    // const geometry = new THREE.PlaneGeometry(1, 1, 1000, 1000);
     const geometry = new THREE.SphereGeometry(50, 1024, 1024)
     geometry.rotateZ(Math.PI * 0.5)
 
