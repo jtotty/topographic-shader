@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
-import BokehPass from './passes/BokehPass'
+import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass'
 
 /**
  * Our post processing. Let the magic happen! 🌟
@@ -49,7 +49,7 @@ export default class PostProcessing {
       {
         focus: 1.4,
         aperture: 0.01,
-        maxblur: 0.0045,
+        maxblur: 0.003,
         width: this.sizes.width * this.sizes.pixelRatio,
         height: this.sizes.height * this.sizes.pixelRatio,
       },
